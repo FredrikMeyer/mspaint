@@ -1,111 +1,112 @@
-html, body {
-    background-color: #eeeeee;
-    height: 100%;
+html,
+body {
+  background-color: #eeeeee;
+  height: 100%;
 }
 
 #root {
-    height: 100%;
+  height: 100%;
 }
 
 $blue: #0227b3;
 
 .App {
-    margin: 50px auto;
-    background-color: #c7c7c7;
-    width: 80%;
-    // height: 80%;
-    text-align: center;
-    background-color: white;
-    border: 5px double black;
+  margin: 50px auto;
+  background-color: #c7c7c7;
+  width: 80%;
+  // height: 80%;
+  text-align: center;
+  background-color: white;
+  border: 5px double black;
 }
 
 .window {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .topbar {
-    background-color: $blue;
-    color: white;
+  background-color: $blue;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+
+  &-text {
+    text-align: center;
+    flex-grow: 1;
+  }
+
+  &-icons {
     display: flex;
-    justify-content: space-between;
-
-    &-text {
-        text-align: center;
-        flex-grow: 1;
+    .icon {
+      background-color: #d0d4d6;
+      border: 2px outset grey;
+      color: black;
     }
-
-    &-icons {
-        display: flex;
-        .icon {
-            background-color: #d0d4d6;
-            border: 2px outset grey;
-            color: black;
-        }
-    }
+  }
 }
 
 .menu {
-    text-align: left;
-    padding-left: 5px;
-    font-weight: 500;
+  text-align: left;
+  padding-left: 5px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+
+  &-elements div::first-letter {
+    text-decoration: underline;
+  }
+
+  &-elements {
     display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid black;
+    height: 100%;
+  }
 
-    &-elements div::first-letter {
-        text-decoration: underline;
-    }
+  &-elements div {
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 2px;
+    cursor: pointer;
+  }
 
-    &-elements {
-        display: flex;
-        height: 100%;
-    }
-
-    &-elements div {
-        padding-right: 5px;
-        padding-left: 5px;
-        padding-bottom: 2px;
-        cursor: pointer;
-    }
-
-    &-elements div:hover a {
-        background-color: $blue;
-        color: white;
-    }
+  &-elements div:hover a {
+    background-color: $blue;
+    color: white;
+  }
 }
 
 .main {
+  flex-grow: 1;
+  display: flex;
+  align-items: stretch;
+
+  &-toolbar {
+    border-right: 1px solid black;
+    width: 86px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+
+    canvas {
+      // display: block;
+    }
+  }
+
+  &-cc {
     flex-grow: 1;
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
 
-    &-toolbar {
-        border-right: 1px solid black;
-        width: 86px;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        align-content: flex-start;
-
-        canvas {
-            // display: block;
-        }
+    &-canvas {
+      // border: 1px solid black;
+      flex-grow: 1;
     }
 
-    &-cc {
-        flex-grow: 1;;
-        display: flex;
-        flex-direction: column;
-
-        &-canvas {
-            // border: 1px solid black;
-            flex-grow: 1;
-        }
-
-        &-color-picker {
-            height: 50px;
-        }
+    &-color-picker {
+      height: 50px;
     }
+  }
 }

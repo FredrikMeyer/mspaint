@@ -1,6 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.scss";
+import menuIcons from "./toolbar.png";
 import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
+
+/* const icons = new Image(178, 856);
+ * icons.src = menuIcons; */
 
 function numberToXY(n: number): [number, number] {
   const x = n % 2;
@@ -98,7 +102,17 @@ function App() {
   const [activeState, setActiveState] = React.useState(1);
 
   const icons = new Image(178, 856);
-  icons.src = "/toolbar2.png";
+  icons.src = menuIcons;
+
+  React.useEffect(() => {
+    icons.src = menuIcons;
+  }, []);
+
+  const [menuLoaded, setMenuLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    icons.onload = () => setMenuLoaded(true);
+  }, []);
 
   return (
     <div className="App">
@@ -120,9 +134,7 @@ function App() {
               <div>File</div>
               <div>About</div>
               <div>
-                  <a href="https://blog.fredrikmeyer.net/">
-                      Blog
-                  </a>
+                <a href="https://blog.fredrikmeyer.net/">Blog</a>
               </div>
               <div>Recommendations</div>
               <div onClick={() => setShowContact(true)}>Contact</div>
@@ -132,18 +144,19 @@ function App() {
         </div>
         <div className="main">
           <div className="main-toolbar">
-            {[...Array(18).keys()].map((i) => (
-              <ToolbarIcon
-                key={i}
-                sourceImage={icons}
-                n={i}
-                marked={i == activeState}
-                setAsActive={() => setActiveState(i)}
-              />
-            ))}
+            {menuLoaded &&
+              [...Array(18).keys()].map((i) => (
+                <ToolbarIcon
+                  key={i}
+                  sourceImage={icons}
+                  n={i}
+                  marked={i == activeState}
+                  setAsActive={() => setActiveState(i)}
+                />
+              ))}
           </div>
           <div className="main-cc">
-              <div className="main-cc-canvas" id="canvas">
+            <div className="main-cc-canvas" id="canvas">
               <Canvas />
             </div>
             <div className="main-cc-color-picker"></div>
