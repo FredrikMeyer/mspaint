@@ -70,7 +70,7 @@ $blue: #0227b3;
         cursor: pointer;
     }
 
-    &-elements div:hover {
+    &-elements div:hover a {
         background-color: $blue;
         color: white;
     }
@@ -82,8 +82,8 @@ $blue: #0227b3;
     align-items: stretch;
 
     &-toolbar {
-        // border: 1px solid black;
-        width: 90px;
+        border-right: 1px solid black;
+        width: 86px;
         display: flex;
         flex-wrap: wrap;
         align-items: flex-start;
@@ -100,7 +100,7 @@ $blue: #0227b3;
         flex-direction: column;
 
         &-canvas {
-            border: 1px solid black;
+            // border: 1px solid black;
             flex-grow: 1;
         }
 

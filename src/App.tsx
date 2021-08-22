@@ -119,7 +119,11 @@ function App() {
             <div className="menu-elements">
               <div>File</div>
               <div>About</div>
-              <div>Blog</div>
+              <div>
+                  <a href="https://blog.fredrikmeyer.net/">
+                      Blog
+                  </a>
+              </div>
               <div>Recommendations</div>
               <div onClick={() => setShowContact(true)}>Contact</div>
               <div>Etc</div>
@@ -140,7 +144,6 @@ function App() {
           </div>
           <div className="main-cc">
               <div className="main-cc-canvas" id="canvas">
-                  Main canvas
               <Canvas />
             </div>
             <div className="main-cc-color-picker"></div>
