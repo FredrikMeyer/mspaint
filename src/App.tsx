@@ -3,6 +3,8 @@ import "./App.scss";
 import menuIcons from "./toolbar.png";
 import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
 
+import Canvas from "./Canvas";
+
 function numberToXY(n: number): [number, number] {
   const x = n % 2;
   const y = (n - (n % 2)) / 2;
@@ -86,29 +88,6 @@ interface Text {
 }
 
 type Tool = Pen | Text;
-
-function Canvas({
-  containerRef,
-}: {
-  containerRef: React.RefObject<HTMLDivElement>;
-}) {
-  const reference = React.useRef<HTMLCanvasElement>(null);
-
-  const [width, setWidth] = React.useState(50);
-  const [height, setHeight] = React.useState(50);
-
-  React.useEffect(() => {
-    const current = containerRef.current;
-    if (current) {
-      const height = current.clientHeight;
-      const width = current.clientWidth;
-      setWidth(width);
-      setHeight(height);
-    }
-  }, [containerRef]);
-
-  return <canvas ref={reference} width={width} height={height}></canvas>;
-}
 
 function App() {
   const [showContact, setShowContact] = React.useState(false);
