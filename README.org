@@ -1,5 +1,8 @@
 #+TITLE: MS Paint look-a-like in React
 
+#+CAPTION: Build status
+[[https://github.com/fredrikmeyer/mspaint/workflows/.github/workflows/build-and-test.yml/badge.svg]]
+
 * Install and run
 
 Do =yarn install= and =yarn dev=.
