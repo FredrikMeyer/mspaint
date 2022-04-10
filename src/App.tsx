@@ -136,7 +136,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="app">
       <div className="window">
         <div className="top-line">
           <div className="topbar">

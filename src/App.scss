@@ -1,19 +1,20 @@
 html,
 body {
-  background-color: #eeeeee;
+  background-color: #eee;
   height: 100%;
   width: 100%;
 }
 
 #root {
   height: 100%;
+  padding-top: 50px;
+  box-sizing: border-box;
 }
 
 $blue: #0227b3;
 
-.App {
-  margin: 50px auto;
-  background-color: #c7c7c7;
+.app {
+  margin: 0 auto;
   width: 80%;
   height: 80%;
   text-align: center;
@@ -40,6 +41,7 @@ $blue: #0227b3;
 
   &-icons {
     display: flex;
+
     .icon {
       background-color: #d0d4d6;
       border: 2px outset grey;
@@ -64,6 +66,10 @@ $blue: #0227b3;
     flex-wrap: wrap;
     display: flex;
     height: 100%;
+
+    a {
+      text-decoration: none;
+    }
   }
 
   &-elements div {
@@ -82,10 +88,13 @@ $blue: #0227b3;
 .main {
   height: 100%;
   flex-grow: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: 86px auto;
   align-items: stretch;
 
   &-toolbar {
+    grid-column: 1;
+    grid-row-start: 1;
     height: 100%;
     border-right: 1px solid black;
     width: 86px; // 86
@@ -100,6 +109,8 @@ $blue: #0227b3;
   }
 
   &-cc {
+    grid-column-start: 2;
+    grid-row-start: 1;
     height: 100%;
     flex-grow: 1;
     display: flex;
