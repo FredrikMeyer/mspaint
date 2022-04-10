@@ -2,11 +2,11 @@
 
 * Install and run
 
-Do `npm install` and `npm run dev`.
+Do =yarn install= and =yarn dev=.
 
 * Build
 
-`npm run build`
+=yarn install=
 
 
 

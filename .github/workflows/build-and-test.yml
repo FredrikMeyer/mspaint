@@ -1,0 +1,20 @@
+name: "Build and test"
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [master]
+
+jobs:
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - run: yarn install
+    - run: yarn prettier
+    - run: yarn typecheck
+    - run: yarn lint
+    - run: yarn build

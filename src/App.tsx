@@ -3,9 +3,6 @@ import "./App.scss";
 import menuIcons from "./toolbar.png";
 import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
 
-/* const icons = new Image(178, 856);
- * icons.src = menuIcons; */
-
 function numberToXY(n: number): [number, number] {
   const x = n % 2;
   const y = (n - (n % 2)) / 2;
@@ -13,17 +10,17 @@ function numberToXY(n: number): [number, number] {
   return [x, y];
 }
 
-type ToolbarIconProps = {
+type ToolbarIconProperties = {
   sourceImage: HTMLImageElement;
   n: number;
   marked: boolean;
   setAsActive: () => void;
 };
 
-function ToolbarIcon(props: ToolbarIconProps) {
-  const { sourceImage, n, marked, setAsActive } = props;
+function ToolbarIcon(properties: ToolbarIconProperties) {
+  const { sourceImage, n, marked, setAsActive } = properties;
 
-  const ref = React.useRef<HTMLCanvasElement>(null);
+  const reference = React.useRef<HTMLCanvasElement>(null);
 
   const [x, y] = numberToXY(n);
 
@@ -34,7 +31,8 @@ function ToolbarIcon(props: ToolbarIconProps) {
   const h = 45;
 
   React.useEffect(() => {
-    const canvas = ref.current;
+    x;
+    const canvas = reference.current;
 
     const context = canvas?.getContext("2d");
     if (!context) return;
@@ -52,7 +50,7 @@ function ToolbarIcon(props: ToolbarIconProps) {
       w,
       h
     );
-  }, [marked]);
+  }, [marked, sourceImage, x, y]);
 
   return (
     <canvas
@@ -62,7 +60,7 @@ function ToolbarIcon(props: ToolbarIconProps) {
         height: `${h}px`,
         width: `${w}px`,
       }}
-      ref={ref}
+      ref={reference}
       width={w}
       height={h}
       onClick={setAsActive}
@@ -88,8 +86,17 @@ interface Text {
 type Tool = Pen | Text;
 
 function Canvas() {
-  const ref = React.useRef<HTMLCanvasElement>(null);
-  return <canvas ref={ref} width={760} height={400}></canvas>;
+  const reference = React.useRef<HTMLCanvasElement>(null);
+  const vw = Math.max(
+    document.documentElement.clientWidth || 0,
+    window.innerWidth || 0
+  );
+  const vh = Math.max(
+    document.documentElement.clientHeight || 0,
+    window.innerHeight || 0
+  );
+
+  return <canvas ref={reference} width={vw} height={vh}></canvas>;
 }
 
 function App() {
@@ -111,6 +118,7 @@ function App() {
   const [menuLoaded, setMenuLoaded] = React.useState(false);
 
   React.useEffect(() => {
+    console.log("hei");
     icons.onload = () => setMenuLoaded(true);
   }, []);
 
