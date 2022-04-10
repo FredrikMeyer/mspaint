@@ -15,7 +15,7 @@ $blue: #0227b3;
   margin: 50px auto;
   background-color: #c7c7c7;
   width: 80%;
-  // height: 80%;
+  height: 80%;
   text-align: center;
   background-color: white;
   border: 5px double black;
@@ -80,13 +80,15 @@ $blue: #0227b3;
 }
 
 .main {
+  height: 100%;
   flex-grow: 1;
   display: flex;
   align-items: stretch;
 
   &-toolbar {
+    height: 100%;
     border-right: 1px solid black;
-    width: 86px;
+    width: 86px; // 86
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -98,6 +100,7 @@ $blue: #0227b3;
   }
 
   &-cc {
+    height: 100%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;

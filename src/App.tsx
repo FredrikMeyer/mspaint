@@ -31,7 +31,6 @@ function ToolbarIcon(properties: ToolbarIconProperties) {
   const h = 45;
 
   React.useEffect(() => {
-    x;
     const canvas = reference.current;
 
     const context = canvas?.getContext("2d");
@@ -53,18 +52,21 @@ function ToolbarIcon(properties: ToolbarIconProperties) {
   }, [marked, sourceImage, x, y]);
 
   return (
-    <canvas
-      style={{
-        margin: "0px",
-        border: "1px solid black",
-        height: `${h}px`,
-        width: `${w}px`,
-      }}
-      ref={reference}
-      width={w}
-      height={h}
-      onClick={setAsActive}
-    ></canvas>
+    <div
+      style={{ border: "1px solid black", height: `${h}px`, width: `${w}px` }}
+    >
+      <canvas
+        style={{
+          margin: "0px",
+          height: `${h}px`,
+          width: `${w}px`,
+        }}
+        ref={reference}
+        width={w}
+        height={h}
+        onClick={setAsActive}
+      ></canvas>
+    </div>
   );
 }
 
@@ -85,18 +87,27 @@ interface Text {
 
 type Tool = Pen | Text;
 
-function Canvas() {
+function Canvas({
+  containerRef,
+}: {
+  containerRef: React.RefObject<HTMLDivElement>;
+}) {
   const reference = React.useRef<HTMLCanvasElement>(null);
-  const vw = Math.max(
-    document.documentElement.clientWidth || 0,
-    window.innerWidth || 0
-  );
-  const vh = Math.max(
-    document.documentElement.clientHeight || 0,
-    window.innerHeight || 0
-  );
 
-  return <canvas ref={reference} width={vw} height={vh}></canvas>;
+  const [width, setWidth] = React.useState(50);
+  const [height, setHeight] = React.useState(50);
+
+  React.useEffect(() => {
+    const current = containerRef.current;
+    if (current) {
+      const height = current.clientHeight;
+      const width = current.clientWidth;
+      setWidth(width);
+      setHeight(height);
+    }
+  }, [containerRef]);
+
+  return <canvas ref={reference} width={width} height={height}></canvas>;
 }
 
 function App() {
@@ -116,6 +127,8 @@ function App() {
   }, []);
 
   const [menuLoaded, setMenuLoaded] = React.useState(false);
+
+  const canvasContainerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     console.log("hei");
@@ -164,8 +177,12 @@ function App() {
               ))}
           </div>
           <div className="main-cc">
-            <div className="main-cc-canvas" id="canvas">
-              <Canvas />
+            <div
+              className="main-cc-canvas"
+              id="canvas"
+              ref={canvasContainerRef}
+            >
+              <Canvas containerRef={canvasContainerRef} />
             </div>
             <div className="main-cc-color-picker"></div>
           </div>
