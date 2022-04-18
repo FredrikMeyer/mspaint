@@ -48,14 +48,24 @@ export default function Canvas({
       ref={reference}
       width={width}
       height={height}
+      onMouseDown={(e) => {
+        ctx?.beginPath();
+      }}
       onMouseMove={(e) => {
         if (e.buttons !== 1) return;
 
         const x = e.clientX - (boundingRect?.left || 0);
         const y = e.clientY - (boundingRect?.top || 0);
 
-        ctx?.ellipse(x, y, 3, 3, 0, 0, 0);
-        ctx?.stroke();
+        if (ctx) {
+          ctx.ellipse(x, y, 3, 3, 0, 0, 0);
+          ctx.stroke();
+        }
+      }}
+      onMouseUp={(e) => {
+        if (ctx) {
+          ctx.stroke();
+        }
       }}
     ></canvas>
   );
