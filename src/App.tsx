@@ -2,7 +2,6 @@ import React from "react";
 import "./App.scss";
 import menuIcons from "./toolbar.png";
 import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
-import Window from "./Window";
 import Canvas from "./Canvas";
 
 function numberToXY(n: number): [number, number] {
@@ -71,32 +70,8 @@ function ToolbarIcon(properties: ToolbarIconProperties) {
     </div>
   );
 }
-
-interface Toolbase {
-  tool: string;
-}
-
-interface Pen extends Toolbase {
-  tool: "pen";
-  color: string;
-  width: number;
-}
-
-interface Text {
-  tool: "text";
-  color: string;
-}
-
-type Tool = Pen | Text;
-
 function App() {
-  const [showContact, setShowContact] = React.useState(false);
-  const [activeTool, setActiveTool] = React.useState<Tool>({
-    color: "black",
-    width: 2,
-    tool: "pen",
-  });
-  const [activeState, setActiveState] = React.useState(1);
+  const [activeState, setActiveState] = React.useState(7);
 
   const icons = new Image(178, 856);
   icons.src = menuIcons;
@@ -136,7 +111,7 @@ function App() {
                 <a href="https://blog.fredrikmeyer.net/">Blog</a>
               </div>
               <div>Recommendations</div>
-              <div onClick={() => setShowContact(true)}>Contact</div>
+              <div>Contact</div>
               <div>Etc</div>
             </div>
           </div>
