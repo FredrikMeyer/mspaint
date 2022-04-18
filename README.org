@@ -6,6 +6,8 @@
 #+CAPTION: CodeQL
 [[https://github.com/fredrikmeyer/mspaint/actions/workflows/codeql-analysis.yml/badge.svg]]
 
+See result in [[https://paint.fredrikmeyer.net/][paint.fredrikmeyer.net]].
+
 * Install and run
 
 Do =yarn install= and =yarn dev=.

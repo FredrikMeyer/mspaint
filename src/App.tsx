@@ -2,7 +2,7 @@ import React from "react";
 import "./App.scss";
 import menuIcons from "./toolbar.png";
 import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
-
+import Window from "./Window";
 import Canvas from "./Canvas";
 
 function numberToXY(n: number): [number, number] {
@@ -110,14 +110,13 @@ function App() {
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    console.log("hei");
     icons.onload = () => setMenuLoaded(true);
   }, []);
 
   return (
     <div className="app">
       <div className="window">
-        <div className="top-line">
+        <div>
           <div className="topbar">
             <div className="topbar-text">Fredrik Meyer - [Untitled]</div>
             <div className="topbar-icons">
