@@ -48,6 +48,18 @@ export default function Canvas({
       ref={reference}
       width={width}
       height={height}
+      onTouchStart={(e) => {
+        ctx?.beginPath();
+      }}
+      onTouchMove={(e) => {
+        const x = e.touches[0].clientX - (boundingRect?.left || 0);
+        const y = e.touches[0].clientY - (boundingRect?.top || 0);
+
+        if (ctx) {
+          ctx.ellipse(x, y, 3, 3, 0, 0, 0);
+          ctx.stroke();
+        }
+      }}
       onMouseDown={(e) => {
         ctx?.beginPath();
       }}
