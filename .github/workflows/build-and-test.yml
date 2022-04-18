@@ -22,3 +22,16 @@ jobs:
       - run: yarn lint
       - run: yarn stylelint
       - run: yarn build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::069789945428:role/Homepage-GithubPublishRole7244AB40-1XQC2LMM33CBP
+          role-session-name: github-actions-publish
+          aws-region: eu-north-1
+      - name: Publish docs
+        # if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        run: |
+          cd dist
+          aws s3 sync . s3://homepage-cloudfrontands3s3bucketb81f9695-nq8e0380hf4g/ --delete --no-progress
+          aws cloudfront create-invalidation --distribution-id E25V7U1FD2KW5E --paths "/*"
