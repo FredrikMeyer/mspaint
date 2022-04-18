@@ -1,5 +1,13 @@
 import React from "react";
 
+function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
+  const current = reference.current;
+  const ctx = current?.getContext("2d");
+
+  const boundingRect = current?.getBoundingClientRect();
+  return { ctx: ctx, boundingRect: boundingRect };
+}
+
 export default function Canvas({
   containerRef,
 }: {
@@ -9,6 +17,8 @@ export default function Canvas({
 
   const [width, setWidth] = React.useState(50);
   const [height, setHeight] = React.useState(50);
+
+  const { ctx, boundingRect } = useCtx(reference);
 
   React.useEffect(() => {
     const current = containerRef.current;
@@ -23,14 +33,30 @@ export default function Canvas({
   React.useEffect(() => {
     const current = reference.current;
     if (current) {
-      const ctx = current.getContext("2d");
       if (ctx) {
         const fontSize = (width * 20) / 200;
         ctx.font = `${fontSize}px serif`;
-        ctx.fillText("Velkommen ", 10, 100);
+        ctx.fillText("Welcome", 10, 100);
+        ctx.font = `${fontSize / 2}px serif`;
+        ctx.fillText("draw here", 10, 200);
       }
     }
   });
 
-  return <canvas ref={reference} width={width} height={height}></canvas>;
+  return (
+    <canvas
+      ref={reference}
+      width={width}
+      height={height}
+      onMouseMove={(e) => {
+        if (e.buttons !== 1) return;
+
+        const x = e.clientX - (boundingRect?.left || 0);
+        const y = e.clientY - (boundingRect?.top || 0);
+
+        ctx?.ellipse(x, y, 3, 3, 0, 0, 0);
+        ctx?.stroke();
+      }}
+    ></canvas>
+  );
 }
