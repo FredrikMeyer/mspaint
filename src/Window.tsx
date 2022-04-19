@@ -30,7 +30,7 @@ export default function Window({ title }: { title: string }) {
     }
   };
 
-  const onMouseUp: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const onMouseUp: React.MouseEventHandler<HTMLDivElement> = () => {
     if (dragging) {
       setDragging(false);
     }

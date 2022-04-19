@@ -117,12 +117,22 @@ $blue: #0227b3;
     flex-direction: column;
 
     &-canvas {
-      // border: 1px solid black;
       flex-grow: 1;
     }
 
     &-color-picker {
-      height: 50px;
+      margin-bottom: 5px;
+      padding: 5px;
+
+      &-row {
+        display: flex;
+
+        div {
+          height: 50px;
+          flex-grow: 1;
+          border: 1px solid black;
+        }
+      }
     }
   }
 }

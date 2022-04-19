@@ -70,74 +70,182 @@ function ToolbarIcon(properties: ToolbarIconProperties) {
     </div>
   );
 }
-function App() {
+
+function Menu() {
+  return (
+    <div className="menu">
+      <div className="menu-elements">
+        <div>File</div>
+        <div>About</div>
+        <div>
+          <a href="https://blog.fredrikmeyer.net/">Blog</a>
+        </div>
+        <div>Recommendations</div>
+        <div>Contact</div>
+        <div>Etc</div>
+      </div>
+    </div>
+  );
+}
+
+function Toolbar() {
   const [activeState, setActiveState] = React.useState(7);
 
-  const icons = new Image(178, 856);
-  icons.src = menuIcons;
+  const icons = React.useMemo(() => {
+    const icons = new Image(178, 856);
+    icons.src = menuIcons;
+
+    return icons;
+  }, []);
 
   React.useEffect(() => {
     icons.src = menuIcons;
-  }, []);
-
+  }, [icons]);
   const [menuLoaded, setMenuLoaded] = React.useState(false);
-
-  const canvasContainerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     icons.onload = () => setMenuLoaded(true);
+  }, [icons]);
+  return (
+    <div className="main-toolbar">
+      {menuLoaded &&
+        [...Array(18).keys()].map((i) => (
+          <ToolbarIcon
+            key={i}
+            sourceImage={icons}
+            n={i}
+            marked={i == activeState}
+            setAsActive={() => setActiveState(i)}
+          />
+        ))}
+    </div>
+  );
+}
+
+function TopBar() {
+  return (
+    <div className="topbar">
+      <div className="topbar-text">Fredrik Meyer - [Untitled]</div>
+      <div className="topbar-icons">
+        <div className="icon">
+          <MdArrowDropDown />
+        </div>
+        <div className="icon">
+          <MdArrowDropUp />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ColorPicker({
+  setCurrentColor,
+}: {
+  setCurrentColor: (c: string) => void;
+}) {
+  const colors = [
+    "white",
+    "grey",
+    "red",
+    "yellow",
+    "cyan",
+    "blue",
+    "magenta",
+    "lightyellow",
+    "lightgreen",
+    "lightskyblue",
+    "orchid",
+  ];
+
+  const row2 = [
+    "black",
+    "darkgrey",
+    "darkred",
+    "goldenrod",
+    "seagreen",
+    "cornflowerblue",
+    "darkblue",
+    "mediumpurple",
+    "wheat",
+    "darkolivegreen",
+    "dodgerblue",
+  ];
+  return (
+    <div className="main-cc-color-picker">
+      <div className="main-cc-color-picker-row">
+        {colors.map((c, i) => (
+          <div
+            key={i}
+            style={{ backgroundColor: c }}
+            onClick={() => setCurrentColor(c)}
+          ></div>
+        ))}
+      </div>
+      <div className="main-cc-color-picker-row">
+        {row2.map((c, i) => (
+          <div
+            key={i}
+            style={{ backgroundColor: c }}
+            onClick={() => setCurrentColor(c)}
+          ></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const canvasContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const [currentColor, setCurrentColor] = React.useState<string>("black");
+
+  const [canvasHeight, setCanvasHeight] = React.useState<undefined | number>(
+    undefined
+  );
+  const [canvasWidth, setCanvasWidth] = React.useState<undefined | number>(
+    undefined
+  );
+
+  React.useEffect(() => {
+    const current = canvasContainerRef.current;
+    if (current) {
+      const height = current.clientHeight;
+      const width = current.clientWidth;
+
+      setCanvasHeight(height);
+      setCanvasWidth(width);
+
+      console.log(height, width);
+    } else {
+      console.log("No current!!");
+    }
   }, []);
 
   return (
     <div className="app">
       <div className="window">
         <div>
-          <div className="topbar">
-            <div className="topbar-text">Fredrik Meyer - [Untitled]</div>
-            <div className="topbar-icons">
-              <div className="icon">
-                <MdArrowDropDown />
-              </div>
-              <div className="icon">
-                <MdArrowDropUp />
-              </div>
-            </div>
-          </div>
-          <div className="menu">
-            <div className="menu-elements">
-              <div>File</div>
-              <div>About</div>
-              <div>
-                <a href="https://blog.fredrikmeyer.net/">Blog</a>
-              </div>
-              <div>Recommendations</div>
-              <div>Contact</div>
-              <div>Etc</div>
-            </div>
-          </div>
+          <TopBar />
+          <Menu />
         </div>
         <div className="main">
-          <div className="main-toolbar">
-            {menuLoaded &&
-              [...Array(18).keys()].map((i) => (
-                <ToolbarIcon
-                  key={i}
-                  sourceImage={icons}
-                  n={i}
-                  marked={i == activeState}
-                  setAsActive={() => setActiveState(i)}
-                />
-              ))}
-          </div>
+          <Toolbar />
           <div className="main-cc">
             <div
               className="main-cc-canvas"
               id="canvas"
               ref={canvasContainerRef}
             >
-              <Canvas containerRef={canvasContainerRef} />
+              {canvasHeight && canvasWidth && (
+                <Canvas
+                  containerRef={canvasContainerRef}
+                  currentColor={currentColor}
+                  height={canvasHeight}
+                  width={canvasWidth}
+                />
+              )}
             </div>
-            <div className="main-cc-color-picker"></div>
+            <ColorPicker setCurrentColor={setCurrentColor} />
           </div>
         </div>
       </div>

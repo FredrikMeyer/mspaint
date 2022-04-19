@@ -4,29 +4,32 @@ function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   const current = reference.current;
   const ctx = current?.getContext("2d");
 
-  const boundingRect = current?.getBoundingClientRect();
-  return { ctx: ctx, boundingRect: boundingRect };
+  return { ctx: ctx };
 }
 
 export default function Canvas({
+  width,
+  height,
   containerRef,
+  currentColor,
 }: {
+  width: number;
+  height: number;
   containerRef: React.RefObject<HTMLDivElement>;
+  currentColor: string;
 }) {
   const reference = React.useRef<HTMLCanvasElement>(null);
 
-  const [width, setWidth] = React.useState(50);
-  const [height, setHeight] = React.useState(50);
+  const { ctx } = useCtx(reference);
 
-  const { ctx, boundingRect } = useCtx(reference);
+  const [left, setLeft] = React.useState(0);
+  const [top, setTop] = React.useState(0);
 
   React.useEffect(() => {
-    const current = containerRef.current;
-    if (current) {
-      const height = current.clientHeight;
-      const width = current.clientWidth;
-      setWidth(width);
-      setHeight(height);
+    const boundingRect = containerRef.current?.getBoundingClientRect();
+    if (boundingRect) {
+      setLeft(boundingRect.left);
+      setTop(boundingRect.top);
     }
   }, [containerRef]);
 
@@ -39,42 +42,48 @@ export default function Canvas({
         ctx.fillText("Welcome", 10, 100);
         ctx.font = `${fontSize / 2}px serif`;
         ctx.fillText("draw here", 10, 200);
+      } else {
+        console.log("no ctx");
       }
+    } else {
+      console.error("no current");
     }
-  });
+  }, [reference, width, ctx]);
 
   return (
     <canvas
       ref={reference}
       width={width}
       height={height}
-      onTouchStart={(e) => {
+      onTouchStart={() => {
         ctx?.beginPath();
       }}
       onTouchMove={(e) => {
-        const x = e.touches[0].clientX - (boundingRect?.left || 0);
-        const y = e.touches[0].clientY - (boundingRect?.top || 0);
+        const x = e.touches[0].clientX - left;
+        const y = e.touches[0].clientY - top;
 
         if (ctx) {
+          ctx.strokeStyle = currentColor;
           ctx.ellipse(x, y, 3, 3, 0, 0, 0);
           ctx.stroke();
         }
       }}
-      onMouseDown={(e) => {
+      onMouseDown={() => {
         ctx?.beginPath();
       }}
       onMouseMove={(e) => {
         if (e.buttons !== 1) return;
 
-        const x = e.clientX - (boundingRect?.left || 0);
-        const y = e.clientY - (boundingRect?.top || 0);
+        const x = e.clientX - left;
+        const y = e.clientY - top;
 
         if (ctx) {
+          ctx.strokeStyle = currentColor;
           ctx.ellipse(x, y, 3, 3, 0, 0, 0);
           ctx.stroke();
         }
       }}
-      onMouseUp={(e) => {
+      onMouseUp={() => {
         if (ctx) {
           ctx.stroke();
         }
