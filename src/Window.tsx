@@ -1,20 +1,17 @@
 import React from "react";
 import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
 
+// TODO use some windowing functionality??
+
 export default function Window({ title }: { title: string }) {
   const [top, setTop] = React.useState(150);
   const [left, setLeft] = React.useState(300);
 
   const [dragging, setDragging] = React.useState(false);
 
-  const mouseDownHandler: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    console.log(e);
-    console.log(e.button);
-
-    const offsetX = e.pageX - left;
-    const offsetY = e.pageY - top;
-
-    console.log(offsetX, offsetY);
+  const mouseDownHandler: React.MouseEventHandler<HTMLDivElement> = () => {
+    /* const offsetX = e.pageX - left;
+     * const offsetY = e.pageY - top; */
 
     setDragging(true);
   };
@@ -25,8 +22,6 @@ export default function Window({ title }: { title: string }) {
     if (dragging) {
       setTop(top + offsetX);
       setLeft(left + offsetY);
-      console.log(dragging);
-      console.log(top - offsetX);
     }
   };
 

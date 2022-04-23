@@ -46,9 +46,11 @@ export default function Canvas({
         ctx.font = `${fontSize / 4}px serif`;
         ctx.fillText("under construction ;)", 10, 300);
       } else {
-        console.log("no ctx");
+        // eslint-disable-next-line no-console
+        console.error("no ctx");
       }
     } else {
+      // eslint-disable-next-line no-console
       console.error("no current");
     }
   }, [reference, width, ctx]);
