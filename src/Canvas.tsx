@@ -37,11 +37,14 @@ export default function Canvas({
     const current = reference.current;
     if (current) {
       if (ctx) {
-        const fontSize = (width * 20) / 200;
+        const fontSize = (width * 15) / 200;
         ctx.font = `${fontSize}px serif`;
-        ctx.fillText("Welcome", 10, 100);
+        ctx.fillText("Welcome", 10, 150);
         ctx.font = `${fontSize / 2}px serif`;
-        ctx.fillText("draw here", 10, 200);
+        ctx.fillText("draw here", 10, 250);
+
+        ctx.font = `${fontSize / 4}px serif`;
+        ctx.fillText("under construction ;)", 10, 300);
       } else {
         console.log("no ctx");
       }
