@@ -32,7 +32,7 @@ export default function AppIcon({
     >
       <Icon size={40} title={title} />
 
-      <div className={`app-icon-text ${clickedTextClass}`}>Github</div>
+      <div className={`app-icon-text ${clickedTextClass}`}>{title}</div>
     </button>
   );
 }
