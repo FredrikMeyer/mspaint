@@ -1,10 +1,12 @@
 import React from "react";
+import { FaGithubSquare, FaTwitterSquare } from "react-icons/fa";
 import "./App.scss";
 import Canvas from "./Canvas";
 import Toolbar from "./Toolbar";
 import Menu from "./Menu";
 import TopBar from "./TopBar";
 import ColorPicker from "./ColorPicker";
+import AppIcon from "./AppIcon";
 
 function App() {
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
@@ -33,34 +35,48 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
-      <div className="window">
-        <div>
-          <TopBar />
-          <Menu />
-        </div>
-        <div className="main">
-          <Toolbar />
-          <div className="main-cc">
-            <div
-              className="main-cc-canvas"
-              id="canvas"
-              ref={canvasContainerRef}
-            >
-              {canvasHeight && canvasWidth && (
-                <Canvas
-                  containerRef={canvasContainerRef}
-                  currentColor={currentColor}
-                  height={canvasHeight}
-                  width={canvasWidth}
-                />
-              )}
+    <>
+      <div className="app">
+        <div className="window">
+          <div>
+            <TopBar />
+            <Menu />
+          </div>
+          <div className="main">
+            <Toolbar />
+            <div className="main-cc">
+              <div
+                className="main-cc-canvas"
+                id="canvas"
+                ref={canvasContainerRef}
+              >
+                {canvasHeight && canvasWidth && (
+                  <Canvas
+                    containerRef={canvasContainerRef}
+                    currentColor={currentColor}
+                    height={canvasHeight}
+                    width={canvasWidth}
+                  />
+                )}
+              </div>
+              <ColorPicker setCurrentColor={setCurrentColor} />
             </div>
-            <ColorPicker setCurrentColor={setCurrentColor} />
           </div>
         </div>
       </div>
-    </div>
+      <div className="apps">
+        <AppIcon
+          title="hei"
+          link="https://github.com/FredrikMeyer/"
+          Icon={FaGithubSquare}
+        />
+        <AppIcon
+          title="Twitter"
+          link="https://twitter.com/FredrikMeyer/"
+          Icon={FaTwitterSquare}
+        />
+      </div>
+    </>
   );
 }
 

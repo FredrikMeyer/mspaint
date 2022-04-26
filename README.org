@@ -16,5 +16,12 @@ Do =yarn install= and =yarn dev=.
 
 =yarn install=
 
+* Icons
 
+https://react-icons.github.io/react-icons/search?q=twitter
 
+* Inspiration
+
+See [[https://www.youtube.com/watch?v=xVIgqs4KpMA][this YouTube video]].
+
+[[https://www.howtogeek.com/795478/windows-31-30-years-later/][This one]] has several Windows 3.10 screenshots.
