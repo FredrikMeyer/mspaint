@@ -66,7 +66,7 @@ function App() {
       </div>
       <div className="apps">
         <AppIcon
-          title="hei"
+          title="Github"
           link="https://github.com/FredrikMeyer/"
           Icon={FaGithubSquare}
         />
