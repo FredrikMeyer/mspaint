@@ -1,5 +1,5 @@
 import React from "react";
-import { FaGithubSquare, FaTwitterSquare } from "react-icons/fa";
+import { FaGithubSquare, FaTwitterSquare, FaLinkedin } from "react-icons/fa";
 import "./App.scss";
 import Canvas from "./Canvas";
 import Toolbar from "./Toolbar";
@@ -74,6 +74,11 @@ function App() {
           title="Twitter"
           link="https://twitter.com/FredrikMeyer/"
           Icon={FaTwitterSquare}
+        />
+        <AppIcon
+          title="LinkedIn"
+          link="https://www.linkedin.com/in/fredrikmeyer/"
+          Icon={FaLinkedin}
         />
       </div>
     </>
