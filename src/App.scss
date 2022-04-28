@@ -9,7 +9,7 @@ body {
 
 #root {
   height: 100%;
-  padding-top: 50px;
+  padding-top: 5vh;
   box-sizing: border-box;
 }
 
@@ -91,7 +91,7 @@ $width: 80%;
   height: 100%;
   flex-grow: 1;
   display: grid;
-  grid-template-columns: 86px auto;
+  grid-template-columns: common.$toolbar-width auto;
   align-items: stretch;
 
   &-toolbar {
@@ -99,7 +99,7 @@ $width: 80%;
     grid-row-start: 1;
     height: 100%;
     border-right: 1px solid black;
-    width: 86px; // 86
+    width: common.$toolbar-width;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -130,7 +130,7 @@ $width: 80%;
         display: flex;
 
         div {
-          height: 50px;
+          height: 5vh;
           flex-grow: 1;
           border: 1px solid black;
         }
