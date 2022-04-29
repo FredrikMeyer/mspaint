@@ -120,6 +120,7 @@ $width: 80%;
 
     &-canvas {
       flex-grow: 1;
+      touch-action: none;
     }
 
     &-color-picker {
