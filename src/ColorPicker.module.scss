@@ -3,6 +3,8 @@
 .color-picker {
   margin-bottom: 5px;
   padding: 5px;
+  display: flex;
+  flex-direction: row;
 
   &-row {
     display: flex;
@@ -13,4 +15,19 @@
       border: 1px solid black;
     }
   }
+}
+
+.current-color {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  width: 5vw;
+  height: 100%;
+}
+
+.current-background-color {
+  width: 50%;
+  height: 50%;
+  border: 1px solid black;
 }

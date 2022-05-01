@@ -124,7 +124,10 @@ function App() {
                   />
                 )}
               </div>
-              <ColorPicker setCurrentColor={setCurrentColor} />
+              <ColorPicker
+                currentColor={currentColor}
+                setCurrentColor={setCurrentColor}
+              />
             </div>
           </div>
         </div>

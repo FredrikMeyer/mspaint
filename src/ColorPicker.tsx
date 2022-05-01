@@ -36,29 +36,41 @@ const row2 = [
 ];
 
 export default function ColorPicker({
+  currentColor,
   setCurrentColor,
 }: {
+  currentColor: string;
   setCurrentColor: (c: string) => void;
 }) {
   return (
     <div className={styles["color-picker"]}>
-      <div className={styles["color-picker-row"]}>
-        {row1.map((c, i) => (
-          <div
-            key={i}
-            style={{ backgroundColor: c }}
-            onClick={() => setCurrentColor(c)}
-          ></div>
-        ))}
+      <div className={styles["current-color"]}>
+        <div
+          className={styles["current-background-color"]}
+          style={{
+            backgroundColor: currentColor,
+          }}
+        ></div>
       </div>
-      <div className={styles["color-picker-row"]}>
-        {row2.map((c, i) => (
-          <div
-            key={i}
-            style={{ backgroundColor: c }}
-            onClick={() => setCurrentColor(c)}
-          ></div>
-        ))}
+      <div style={{ flexGrow: 1 }}>
+        <div className={styles["color-picker-row"]}>
+          {row1.map((c, i) => (
+            <div
+              key={i}
+              style={{ backgroundColor: c }}
+              onClick={() => setCurrentColor(c)}
+            ></div>
+          ))}
+        </div>
+        <div className={styles["color-picker-row"]}>
+          {row2.map((c, i) => (
+            <div
+              key={i}
+              style={{ backgroundColor: c }}
+              onClick={() => setCurrentColor(c)}
+            ></div>
+          ))}
+        </div>
       </div>
     </div>
   );
