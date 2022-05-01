@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./MenuElement.module.scss";
+import { NonEmptyArray } from "./types";
 
 /**
  * Found here https://stackoverflow.com/a/45323523/1013553
@@ -37,8 +38,6 @@ function Dropdown({
   const classes = `${styles.dropdown} ${showClass}`;
   return <div className={classes}>{children}</div>;
 }
-
-type NonEmptyArray<T> = [T, ...T[]];
 
 export type MenuElementProp =
   | {
