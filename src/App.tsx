@@ -1,5 +1,5 @@
 import React from "react";
-import type { Optional } from "./types";
+import type { DrawingTool, Optional } from "./types";
 import "./App.scss";
 import Canvas from "./Canvas";
 import Toolbar from "./Toolbar";
@@ -13,6 +13,7 @@ function App() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   const [currentColor, setCurrentColor] = React.useState<string>("black");
+  const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
 
   const [canvasHeight, setCanvasHeight] =
     React.useState<Optional<number>>(undefined);
@@ -105,7 +106,7 @@ function App() {
             ]}
           />
           <div className="main">
-            <Toolbar />
+            <Toolbar activeTool={activeTool} setActiveTool={setActiveTool} />
             <div className="main-cc">
               <div
                 className="main-cc-canvas"
@@ -114,6 +115,7 @@ function App() {
               >
                 {canvasHeight && canvasWidth && (
                   <Canvas
+                    activeTool={activeTool}
                     containerRef={canvasContainerRef}
                     canvasRef={canvasRef}
                     currentColor={currentColor}

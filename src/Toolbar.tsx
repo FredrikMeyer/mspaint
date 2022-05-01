@@ -2,9 +2,26 @@ import React from "react";
 import menuIcons from "./toolbar.png";
 import ToolbarIcon from "./ToolbarIcon";
 import styles from "./Toolbar.module.scss";
+import { DrawingTool } from "./types";
 
-export default function Toolbar() {
-  const [activeState, setActiveState] = React.useState(7);
+const toolMap: Record<DrawingTool, number> = {
+  DRAW: 7,
+  ERASE: 5,
+  NOOP: -1,
+};
+
+const rToolMap: Record<number, DrawingTool> = { 7: "DRAW", 5: "ERASE" };
+
+export default function Toolbar({
+  activeTool,
+  setActiveTool,
+}: {
+  activeTool: DrawingTool;
+  setActiveTool: (t: DrawingTool) => void;
+}) {
+  const activeToolIndex = React.useMemo(() => {
+    return toolMap[activeTool];
+  }, [activeTool]);
 
   const icons = React.useMemo(() => {
     const icons = new Image(178, 856);
@@ -29,8 +46,8 @@ export default function Toolbar() {
             key={i}
             sourceImage={icons}
             n={i}
-            marked={i == activeState}
-            setAsActive={() => setActiveState(i)}
+            marked={i == activeToolIndex}
+            setAsActive={() => setActiveTool(rToolMap[i] ?? i)}
           />
         ))}
     </div>

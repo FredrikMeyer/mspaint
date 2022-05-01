@@ -1,4 +1,5 @@
 import React from "react";
+import { DrawingTool } from "./types";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   const current = reference.current;
@@ -13,7 +14,9 @@ export default function Canvas({
   containerRef,
   canvasRef,
   currentColor,
+  activeTool,
 }: {
+  activeTool: DrawingTool;
   width: number;
   height: number;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -62,11 +65,15 @@ export default function Canvas({
 
   const onMove = React.useCallback(
     (ctx: CanvasRenderingContext2D, x: number, y: number) => {
-      ctx.strokeStyle = currentColor;
+      if (activeTool == "DRAW") {
+        ctx.strokeStyle = currentColor;
+      } else if (activeTool == "ERASE") {
+        ctx.strokeStyle = "white";
+      }
       ctx.ellipse(x, y, 3, 3, 0, 0, 0);
       ctx.stroke();
     },
-    [ctx, currentColor]
+    [ctx, currentColor, activeTool]
   );
 
   return (
