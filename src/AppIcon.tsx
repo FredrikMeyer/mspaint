@@ -1,6 +1,7 @@
 import React from "react";
 import { IconType } from "react-icons/lib";
 import { useClickedOutside } from "./utils";
+import "./AppIcon.scss";
 
 export default function AppIcon({
   Icon,

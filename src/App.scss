@@ -13,11 +13,9 @@ body {
   box-sizing: border-box;
 }
 
-$width: 80%;
-
 .app {
   margin: 0 auto;
-  width: $width;
+  width: common.$width;
   height: 80%;
   text-align: center;
   background-color: white;
@@ -137,49 +135,5 @@ $width: 80%;
         }
       }
     }
-  }
-}
-
-@mixin marked {
-  background-color: common.$blue;
-  color: white;
-}
-
-.apps {
-  display: flex;
-  margin: 0 auto;
-  border: 5px double black;
-  justify-content: center;
-  width: $width;
-  background-color: white;
-  margin-top: 20px;
-  padding: 5px;
-}
-
-.app-icon {
-  display: flex;
-  margin-left: 5px;
-  margin-right: 5px;
-  flex-direction: column;
-  align-items: center;
-  padding: 1px;
-  border: none;
-  background-color: transparent;
-
-  &-text {
-    padding: 2px;
-
-    &-clicked {
-      @include marked;
-    }
-  }
-
-  &-text:hover {
-    @include marked;
-  }
-
-  &-clicked {
-    border: 1px dotted black;
-    padding: 0;
   }
 }

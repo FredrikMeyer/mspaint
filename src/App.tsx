@@ -1,24 +1,22 @@
 import React from "react";
-import { FaGithubSquare, FaTwitterSquare, FaLinkedin } from "react-icons/fa";
+import type { Optional } from "./types";
 import "./App.scss";
 import Canvas from "./Canvas";
 import Toolbar from "./Toolbar";
 import Menu from "./Menu";
 import TopBar from "./TopBar";
 import ColorPicker from "./ColorPicker";
-import AppIcon from "./AppIcon";
+import Socials from "./Socials";
 
 function App() {
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
 
   const [currentColor, setCurrentColor] = React.useState<string>("black");
 
-  const [canvasHeight, setCanvasHeight] = React.useState<undefined | number>(
-    undefined
-  );
-  const [canvasWidth, setCanvasWidth] = React.useState<undefined | number>(
-    undefined
-  );
+  const [canvasHeight, setCanvasHeight] =
+    React.useState<Optional<number>>(undefined);
+  const [canvasWidth, setCanvasWidth] =
+    React.useState<Optional<number>>(undefined);
 
   React.useEffect(() => {
     const current = canvasContainerRef.current;
@@ -64,23 +62,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="apps">
-        <AppIcon
-          title="Github"
-          link="https://github.com/FredrikMeyer/"
-          Icon={FaGithubSquare}
-        />
-        <AppIcon
-          title="Twitter"
-          link="https://twitter.com/FredrikMeyer/"
-          Icon={FaTwitterSquare}
-        />
-        <AppIcon
-          title="LinkedIn"
-          link="https://www.linkedin.com/in/fredrikmeyer/"
-          Icon={FaLinkedin}
-        />
-      </div>
+      <Socials />
     </>
   );
 }

@@ -1,0 +1,12 @@
+@use "common";
+
+.apps {
+  display: flex;
+  margin: 0 auto;
+  border: 5px double black;
+  justify-content: center;
+  width: common.$width;
+  background-color: white;
+  margin-top: 20px;
+  padding: 5px;
+}

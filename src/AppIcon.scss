@@ -1,0 +1,34 @@
+@use "common";
+
+@mixin marked {
+  background-color: common.$blue;
+  color: white;
+}
+
+.app-icon {
+  display: flex;
+  margin-left: 5px;
+  margin-right: 5px;
+  flex-direction: column;
+  align-items: center;
+  padding: 1px;
+  border: none;
+  background-color: transparent;
+
+  &-text {
+    padding: 2px;
+
+    &-clicked {
+      @include marked;
+    }
+  }
+
+  &-text:hover {
+    @include marked;
+  }
+
+  &-clicked {
+    border: 1px dotted black;
+    padding: 0;
+  }
+}
