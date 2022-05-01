@@ -43,3 +43,5 @@ CSS is written mostly with [[https://sass-lang.com/][SCSS]] and organized with [
 See [[https://www.youtube.com/watch?v=xVIgqs4KpMA][this YouTube video]].
 
 [[https://www.howtogeek.com/795478/windows-31-30-years-later/][This one]] has several Windows 3.10 screenshots.
+
+[[https://www.pcjs.org/software/pcx86/sys/windows/3.10/][Windows 3.10 emulator]].

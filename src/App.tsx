@@ -10,6 +10,7 @@ import Socials from "./Socials";
 
 function App() {
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   const [currentColor, setCurrentColor] = React.useState<string>("black");
 
@@ -32,12 +33,77 @@ function App() {
     }
   }, []);
 
+  const clearCanvas = React.useCallback(() => {
+    const ctx = canvasRef.current?.getContext("2d");
+
+    if (ctx && canvasWidth && canvasHeight) {
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    } else {
+      // eslint-disable-next-line no-console
+      console.error("No ctx!");
+    }
+  }, [canvasRef, canvasHeight, canvasWidth]);
+
   return (
     <>
       <div className="app">
         <div className="window">
           <TopBar />
-          <Menu />
+          <Menu
+            elements={[
+              {
+                kind: "NODE",
+                title: "File",
+                elements: [
+                  {
+                    kind: "LEAF",
+                    title: "New",
+                    callback: clearCanvas,
+                  },
+                  {
+                    kind: "LEAF",
+                    title: "Save",
+                    callback: () => {
+                      // eslint-disable-next-line no-console
+                      console.log("Save");
+                    },
+                  },
+                ],
+              },
+              {
+                kind: "LEAF",
+                title: "About",
+                callback: () => {
+                  // eslint-disable-next-line no-console
+                  console.log("About");
+                },
+              },
+              {
+                kind: "LEAF",
+                title: "Blog",
+                callback: () => {
+                  // eslint-disable-next-line no-console
+                  console.log("Blog");
+                },
+              },
+              {
+                kind: "LEAF",
+                title: "Recommendations",
+                callback: () => {
+                  // eslint-disable-next-line no-console
+                  console.log("Recommendations");
+                },
+              },
+              {
+                kind: "LEAF",
+                title: "Contact",
+                callback: () => {
+                  // eslint-disable-next-line no-console
+                  console.log("Contact");
+                },
+              },
+            ]}
+          />
           <div className="main">
             <Toolbar />
             <div className="main-cc">
@@ -49,6 +115,7 @@ function App() {
                 {canvasHeight && canvasWidth && (
                   <Canvas
                     containerRef={canvasContainerRef}
+                    canvasRef={canvasRef}
                     currentColor={currentColor}
                     height={canvasHeight}
                     width={canvasWidth}

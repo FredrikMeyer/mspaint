@@ -11,16 +11,16 @@ export default function Canvas({
   width,
   height,
   containerRef,
+  canvasRef,
   currentColor,
 }: {
   width: number;
   height: number;
   containerRef: React.RefObject<HTMLDivElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
   currentColor: string;
 }) {
-  const reference = React.useRef<HTMLCanvasElement>(null);
-
-  const { ctx } = useCtx(reference);
+  const { ctx } = useCtx(canvasRef);
 
   const [left, setLeft] = React.useState(0);
   const [top, setTop] = React.useState(0);
@@ -34,8 +34,9 @@ export default function Canvas({
   }, [containerRef]);
 
   React.useEffect(() => {
-    const current = reference.current;
+    const current = canvasRef.current;
     if (current) {
+      const ctx = current.getContext("2d");
       if (ctx) {
         const fontSize = (width * 15) / 200;
         ctx.font = `${fontSize}px serif`;
@@ -47,35 +48,42 @@ export default function Canvas({
         ctx.fillText("under construction ;)", 10, 300);
       } else {
         // eslint-disable-next-line no-console
-        console.error("no ctx");
+        console.error("No canvas ctx yet");
       }
     } else {
       // eslint-disable-next-line no-console
-      console.error("no current");
+      console.error("No ref! (ie canvas was not mounted)");
     }
-  }, [reference, width, ctx]);
+  }, [canvasRef, width]);
+
+  const onTouchStart = React.useCallback(() => {
+    ctx?.beginPath();
+  }, [ctx]);
+
+  const onMove = React.useCallback(
+    (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+      ctx.strokeStyle = currentColor;
+      ctx.ellipse(x, y, 3, 3, 0, 0, 0);
+      ctx.stroke();
+    },
+    [ctx, currentColor]
+  );
 
   return (
     <canvas
-      ref={reference}
+      ref={canvasRef}
       width={width}
       height={height}
-      onTouchStart={() => {
-        ctx?.beginPath();
-      }}
+      onTouchStart={onTouchStart}
       onTouchMove={(e) => {
         const x = e.touches[0].clientX - left;
         const y = e.touches[0].clientY - top;
 
         if (ctx) {
-          ctx.strokeStyle = currentColor;
-          ctx.ellipse(x, y, 3, 3, 0, 0, 0);
-          ctx.stroke();
+          onMove(ctx, x, y);
         }
       }}
-      onMouseDown={() => {
-        ctx?.beginPath();
-      }}
+      onMouseDown={onTouchStart}
       onMouseMove={(e) => {
         if (e.buttons !== 1) return;
 
@@ -83,9 +91,7 @@ export default function Canvas({
         const y = e.clientY - top;
 
         if (ctx) {
-          ctx.strokeStyle = currentColor;
-          ctx.ellipse(x, y, 3, 3, 0, 0, 0);
-          ctx.stroke();
+          onMove(ctx, x, y);
         }
       }}
       onMouseUp={() => {
