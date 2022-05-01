@@ -8,6 +8,13 @@
 
 See result in [[https://paint.fredrikmeyer.net/][paint.fredrikmeyer.net]].
 
+
+test 
+#+begin_src mermaid
+flowchart TD
+    Start --> Stop
+#+end_src
+
 * Install and run
 
 Do =yarn install= and =yarn dev=.

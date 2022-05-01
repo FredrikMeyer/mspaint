@@ -36,10 +36,8 @@ function App() {
     <>
       <div className="app">
         <div className="window">
-          <div>
-            <TopBar />
-            <Menu />
-          </div>
+          <TopBar />
+          <Menu />
           <div className="main">
             <Toolbar />
             <div className="main-cc">
