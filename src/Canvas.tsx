@@ -73,7 +73,7 @@ export default function Canvas({
       ctx.ellipse(x, y, 3, 3, 0, 0, 0);
       ctx.stroke();
     },
-    [ctx, currentColor, activeTool]
+    [currentColor, activeTool]
   );
 
   return (
