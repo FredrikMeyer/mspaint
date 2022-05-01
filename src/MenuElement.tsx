@@ -63,7 +63,13 @@ export default function MenuElement({ prop }: { prop: MenuElementProp }) {
           {prop.elements.map((el) => {
             if (el.kind == "LEAF") {
               return (
-                <div key={el.title} onClick={el.callback}>
+                <div
+                  key={el.title}
+                  onClick={() => {
+                    el.callback();
+                    setIsComponentVisible(false);
+                  }}
+                >
                   {el.title}
                 </div>
               );
