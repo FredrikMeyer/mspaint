@@ -1,0 +1,16 @@
+@use "common";
+
+.color-picker {
+  margin-bottom: 5px;
+  padding: 5px;
+
+  &-row {
+    display: flex;
+
+    div {
+      height: 5vh;
+      flex-grow: 1;
+      border: 1px solid black;
+    }
+  }
+}

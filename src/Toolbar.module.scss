@@ -1,0 +1,13 @@
+@use "common";
+
+.toolbar {
+  grid-column: 1;
+  grid-row-start: 1;
+  height: 100%;
+  border-right: 1px solid black;
+  width: common.$toolbar-width;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+}

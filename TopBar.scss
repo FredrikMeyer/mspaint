@@ -1,0 +1,23 @@
+@use "common";
+
+.topbar {
+  background-color: common.$blue;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+
+  &-text {
+    text-align: center;
+    flex-grow: 1;
+  }
+
+  &-icons {
+    display: flex;
+
+    .icon {
+      background-color: #d0d4d6;
+      border: 2px outset grey;
+      color: black;
+    }
+  }
+}

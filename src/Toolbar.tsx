@@ -1,7 +1,7 @@
 import React from "react";
 import menuIcons from "./toolbar.png";
-
 import ToolbarIcon from "./ToolbarIcon";
+import styles from "./Toolbar.module.scss";
 
 export default function Toolbar() {
   const [activeState, setActiveState] = React.useState(7);
@@ -22,7 +22,7 @@ export default function Toolbar() {
     icons.onload = () => setMenuLoaded(true);
   }, [icons]);
   return (
-    <div className="main-toolbar">
+    <div className={styles.toolbar}>
       {menuLoaded &&
         [...Array(18).keys()].map((i) => (
           <ToolbarIcon

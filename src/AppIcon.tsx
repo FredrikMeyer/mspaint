@@ -1,7 +1,7 @@
 import React from "react";
 import { IconType } from "react-icons/lib";
 import { useClickedOutside } from "./utils";
-import "./AppIcon.scss";
+import styles from "./AppIcon.module.scss";
 
 export default function AppIcon({
   Icon,
@@ -16,13 +16,13 @@ export default function AppIcon({
 
   const { ref } = useClickedOutside<HTMLButtonElement>((v) => setClicked(!v));
 
-  const clickedClass = clicked ? "app-icon-clicked" : "";
-  const clickedTextClass = clicked ? "app-icon-text-clicked" : "";
+  const clickedClass = clicked ? styles["app-icon-clicked"] : "";
+  const clickedTextClass = clicked ? styles["app-icon-text-clicked"] : "";
 
   return (
     <button
       ref={ref}
-      className={`app-icon ${clickedClass}`}
+      className={`${styles["app-icon"]} ${clickedClass}`}
       onClick={() => {
         setClicked(true);
 
@@ -33,7 +33,9 @@ export default function AppIcon({
     >
       <Icon size={40} title={title} />
 
-      <div className={`app-icon-text ${clickedTextClass}`}>{title}</div>
+      <div className={`${styles["app-icon-text"]} ${clickedTextClass}`}>
+        {title}
+      </div>
     </button>
   );
 }

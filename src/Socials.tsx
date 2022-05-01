@@ -1,12 +1,12 @@
 import React from "react";
 import { FaGithubSquare, FaTwitterSquare, FaLinkedin } from "react-icons/fa";
 import "./App.scss";
-import "./Socials.scss";
+import styles from "./Socials.module.scss";
 import AppIcon from "./AppIcon";
 
 export default function Socials() {
   return (
-    <div className="apps">
+    <div className={styles.apps}>
       <AppIcon
         title="Github"
         link="https://github.com/FredrikMeyer/"

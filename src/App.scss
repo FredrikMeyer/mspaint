@@ -28,85 +28,12 @@ body {
   height: 100%;
 }
 
-.topbar {
-  background-color: common.$blue;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-
-  &-text {
-    text-align: center;
-    flex-grow: 1;
-  }
-
-  &-icons {
-    display: flex;
-
-    .icon {
-      background-color: #d0d4d6;
-      border: 2px outset grey;
-      color: black;
-    }
-  }
-}
-
-.menu {
-  text-align: left;
-  padding-left: 5px;
-  font-weight: 500;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid black;
-
-  &-elements div::first-letter {
-    text-decoration: underline;
-  }
-
-  &-elements {
-    flex-wrap: wrap;
-    display: flex;
-    height: 100%;
-
-    a {
-      text-decoration: none;
-    }
-  }
-
-  &-elements div {
-    padding-right: 5px;
-    padding-left: 5px;
-    padding-bottom: 2px;
-    cursor: pointer;
-  }
-
-  &-elements div:hover a {
-    background-color: common.$blue;
-    color: white;
-  }
-}
-
 .main {
   height: 100%;
   flex-grow: 1;
   display: grid;
   grid-template-columns: common.$toolbar-width auto;
   align-items: stretch;
-
-  &-toolbar {
-    grid-column: 1;
-    grid-row-start: 1;
-    height: 100%;
-    border-right: 1px solid black;
-    width: common.$toolbar-width;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    align-content: flex-start;
-
-    canvas {
-      // display: block;
-    }
-  }
 
   &-cc {
     grid-column-start: 2;
@@ -119,21 +46,6 @@ body {
     &-canvas {
       flex-grow: 1;
       touch-action: none;
-    }
-
-    &-color-picker {
-      margin-bottom: 5px;
-      padding: 5px;
-
-      &-row {
-        display: flex;
-
-        div {
-          height: 5vh;
-          flex-grow: 1;
-          border: 1px solid black;
-        }
-      }
     }
   }
 }

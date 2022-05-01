@@ -1,5 +1,5 @@
 import React from "react";
-import "./Menu.scss";
+import styles from "./Menu.module.scss";
 
 /**
  * Found here https://stackoverflow.com/a/45323523/1013553
@@ -26,11 +26,11 @@ function useDropdownVisible(initialIsVisible: boolean) {
 }
 
 function Dropdown({ show }: { show: boolean }) {
-  const showClass = show ? "dropdown-show" : "";
-  const classes = `dropdown ${showClass}`;
+  const showClass = show ? styles["dropdown-show"] : "";
+  const classes = `${styles.dropdown} ${showClass}`;
   return (
     <div className={classes}>
-      <div>Hei</div>
+      <div>New</div>
       <div>Other</div>
     </div>
   );
@@ -50,8 +50,8 @@ function MenuElement() {
 
 export default function Menu() {
   return (
-    <div className="menu">
-      <div className="menu-elements">
+    <div className={styles.menu}>
+      <div className={styles["menu-elements"]}>
         <MenuElement />
         <div>About</div>
         <div>
