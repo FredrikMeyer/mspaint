@@ -9,12 +9,6 @@
 See result in [[https://paint.fredrikmeyer.net/][paint.fredrikmeyer.net]].
 
 
-test 
-#+begin_src mermaid
-flowchart TD
-    Start --> Stop
-#+end_src
-
 * Install and run
 
 Do =yarn install= and =yarn dev=.
@@ -26,6 +20,20 @@ Do =yarn install= and =yarn dev=.
 * Icons
 
 https://react-icons.github.io/react-icons/search?q=twitter
+
+* CSS processing
+
+CSS is written mostly with [[https://sass-lang.com/][SCSS]] and organized with [[https://github.com/css-modules/css-modules][CSS Modules]].
+
+#+begin_src plantuml :file css_processing.png :exports both
+@startuml
+[SCSS] -> [CSS] : transpile
+[CSS] -> [processed CSS] : PostCSS\n(autoprefixer, etc)
+@enduml
+#+end_src
+
+#+RESULTS:
+[[file:css_processing.png]]
 
 * Inspiration
 
