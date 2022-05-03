@@ -15,6 +15,7 @@ export default function Canvas({
   canvasRef,
   currentColor,
   activeTool,
+  toolSize,
 }: {
   activeTool: DrawingTool;
   width: number;
@@ -22,6 +23,7 @@ export default function Canvas({
   containerRef: React.RefObject<HTMLDivElement>;
   canvasRef: React.RefObject<HTMLCanvasElement>;
   currentColor: string;
+  toolSize: number;
 }) {
   const { ctx } = useCtx(canvasRef);
 
@@ -70,10 +72,11 @@ export default function Canvas({
       } else if (activeTool == "ERASE") {
         ctx.strokeStyle = "white";
       }
-      ctx.ellipse(x, y, 3, 3, 0, 0, 0);
+      ctx.lineWidth = toolSize;
+      ctx.lineTo(x, y);
       ctx.stroke();
     },
-    [currentColor, activeTool]
+    [currentColor, activeTool, toolSize]
   );
 
   return (
@@ -85,7 +88,6 @@ export default function Canvas({
       onTouchMove={(e) => {
         const x = e.touches[0].clientX - left;
         const y = e.touches[0].clientY - top;
-
         if (ctx) {
           onMove(ctx, x, y);
         }

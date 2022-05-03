@@ -36,16 +36,28 @@ body {
   align-items: stretch;
 
   &-cc {
-    grid-column-start: 2;
     grid-row-start: 1;
     height: 100%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 
+    &-canvas-container {
+      padding: 0;
+      grid-column-start: 2;
+      grid-row-start: 1;
+      height: 100%;
+      flex-grow: 1;
+      border: 1px solid black;
+      margin: 5px;
+    }
+
     &-canvas {
+      height: 100%;
       flex-grow: 1;
       touch-action: none;
+      margin: 0;
+      padding: 0;
     }
   }
 }

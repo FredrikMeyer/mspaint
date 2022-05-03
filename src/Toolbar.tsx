@@ -15,9 +15,12 @@ const rToolMap: Record<number, DrawingTool> = { 7: "DRAW", 5: "ERASE" };
 export default function Toolbar({
   activeTool,
   setActiveTool,
+  setToolSize,
 }: {
   activeTool: DrawingTool;
   setActiveTool: (t: DrawingTool) => void;
+  toolSize: number;
+  setToolSize: (s: number) => void;
 }) {
   const activeToolIndex = React.useMemo(() => {
     return toolMap[activeTool];
@@ -40,16 +43,29 @@ export default function Toolbar({
   }, [icons]);
   return (
     <div className={styles.toolbar}>
-      {menuLoaded &&
-        [...Array(18).keys()].map((i) => (
-          <ToolbarIcon
+      {menuLoaded && (
+        <div className={styles["toolbar-icons"]}>
+          {[...Array(18).keys()].map((i) => (
+            <ToolbarIcon
+              key={i}
+              sourceImage={icons}
+              n={i}
+              marked={i == activeToolIndex}
+              setAsActive={() => setActiveTool(rToolMap[i] ?? i)}
+            />
+          ))}
+        </div>
+      )}
+      <div className={styles["tool-size"]}>
+        {[...Array(8).keys()].map((i) => (
+          <div
             key={i}
-            sourceImage={icons}
-            n={i}
-            marked={i == activeToolIndex}
-            setAsActive={() => setActiveTool(rToolMap[i] ?? i)}
-          />
+            className={styles["tool-size-bar"]}
+            style={{ height: 3 * i }}
+            onClick={() => setToolSize(i)}
+          ></div>
         ))}
+      </div>
     </div>
   );
 }

@@ -4,10 +4,33 @@
   grid-column: 1;
   grid-row-start: 1;
   height: 100%;
-  border-right: 1px solid black;
   width: common.$toolbar-width;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.toolbar-icons {
+  max-height: 100%;
+  overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   align-content: flex-start;
+}
+
+.tool-size {
+  border: 1px solid black;
+  margin-bottom: 10px;
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.tool-size-bar {
+  width: 80%;
+  background-color: black;
+  margin-bottom: 5px;
 }

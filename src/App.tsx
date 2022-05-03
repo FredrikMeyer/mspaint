@@ -14,6 +14,7 @@ function App() {
 
   const [currentColor, setCurrentColor] = React.useState<string>("black");
   const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
+  const [toolSize, setToolSize] = React.useState<number>(1);
 
   const [canvasHeight, setCanvasHeight] =
     React.useState<Optional<number>>(undefined);
@@ -106,23 +107,33 @@ function App() {
             ]}
           />
           <div className="main">
-            <Toolbar activeTool={activeTool} setActiveTool={setActiveTool} />
+            <Toolbar
+              activeTool={activeTool}
+              setActiveTool={setActiveTool}
+              toolSize={toolSize}
+              setToolSize={setToolSize}
+            />
             <div className="main-cc">
-              <div
-                className="main-cc-canvas"
-                id="canvas"
-                ref={canvasContainerRef}
-              >
-                {canvasHeight && canvasWidth && (
-                  <Canvas
-                    activeTool={activeTool}
-                    containerRef={canvasContainerRef}
-                    canvasRef={canvasRef}
-                    currentColor={currentColor}
-                    height={canvasHeight}
-                    width={canvasWidth}
-                  />
-                )}
+              <div className="main-cc-canvas-container">
+                <div
+                  className="main-cc-canvas"
+                  id="canvas"
+                  ref={canvasContainerRef}
+                >
+                  {canvasHeight && canvasWidth ? (
+                    <Canvas
+                      activeTool={activeTool}
+                      containerRef={canvasContainerRef}
+                      canvasRef={canvasRef}
+                      currentColor={currentColor}
+                      toolSize={toolSize}
+                      height={canvasHeight}
+                      width={canvasWidth}
+                    />
+                  ) : (
+                    "No canvas loaded"
+                  )}
+                </div>
               </div>
               <ColorPicker
                 currentColor={currentColor}
