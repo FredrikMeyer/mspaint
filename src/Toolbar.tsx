@@ -12,6 +12,27 @@ const toolMap: Record<DrawingTool, number> = {
 
 const rToolMap: Record<number, DrawingTool> = { 7: "DRAW", 5: "ERASE" };
 
+function useIcons() {
+  const icons = React.useMemo(() => {
+    const icons = new Image(178, 856);
+    icons.src = menuIcons;
+
+    return icons;
+  }, []);
+
+  const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    icons.src = menuIcons;
+  }, [icons]);
+
+  React.useEffect(() => {
+    icons.onload = () => setLoaded(true);
+  }, [icons]);
+
+  return { icons, loaded };
+}
+
 export default function Toolbar({
   activeTool,
   setActiveTool,
@@ -26,24 +47,11 @@ export default function Toolbar({
     return toolMap[activeTool];
   }, [activeTool]);
 
-  const icons = React.useMemo(() => {
-    const icons = new Image(178, 856);
-    icons.src = menuIcons;
+  const { icons, loaded } = useIcons();
 
-    return icons;
-  }, []);
-
-  React.useEffect(() => {
-    icons.src = menuIcons;
-  }, [icons]);
-  const [menuLoaded, setMenuLoaded] = React.useState(false);
-
-  React.useEffect(() => {
-    icons.onload = () => setMenuLoaded(true);
-  }, [icons]);
   return (
     <div className={styles.toolbar}>
-      {menuLoaded && (
+      {loaded && (
         <div className={styles["toolbar-icons"]}>
           {[...Array(18).keys()].map((i) => (
             <ToolbarIcon
