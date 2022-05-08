@@ -17,6 +17,9 @@ Do =yarn install= and =yarn dev=.
 
 =yarn install=
 
+** Script to generate icons
+
+Run `python cut_image.py` to cut the screenshot of the toolbar into smaller images.
 * Icons
 
 https://react-icons.github.io/react-icons/search?q=twitter
