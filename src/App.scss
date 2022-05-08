@@ -10,16 +10,29 @@ body {
 #root {
   height: 100%;
   padding-top: 1vh;
+  padding-bottom: 1vh;
   box-sizing: border-box;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  margin: auto;
+  padding: 0;
+  align-items: center;
+}
+
 .app {
-  margin: 0 auto;
+  min-height: 0;
   width: common.$width;
-  height: 80%;
+  flex-grow: 0.8;
   text-align: center;
   background-color: white;
   border: 5px double black;
+  margin-bottom: 0;
+  margin-top: 30px;
 }
 
 .window {

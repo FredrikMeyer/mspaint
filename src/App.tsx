@@ -7,6 +7,7 @@ import Menu from "./Menu";
 import TopBar from "./TopBar";
 import ColorPicker from "./ColorPicker";
 import Socials from "./Socials";
+import { MenuElementProp } from "./MenuElement";
 
 function App() {
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
@@ -46,66 +47,73 @@ function App() {
     }
   }, [canvasRef, canvasHeight, canvasWidth]);
 
+  const menuElements: MenuElementProp[] = [
+    {
+      kind: "NODE",
+      title: "File",
+      elements: [
+        {
+          kind: "LEAF",
+          title: "New",
+          callback: clearCanvas,
+        },
+        {
+          kind: "LEAF",
+          title: "Save",
+          callback: () => {
+            const current = canvasRef.current;
+            if (current) {
+              const link = document.createElement("a");
+              link.download = "canvas.png";
+              link.href = current.toDataURL("image/png");
+              link.click();
+            }
+            // eslint-disable-next-line no-console
+            console.log("Save");
+          },
+        },
+      ],
+    },
+    {
+      kind: "LEAF",
+      title: "About",
+      callback: () => {
+        // eslint-disable-next-line no-console
+        console.log("About");
+      },
+    },
+    {
+      kind: "LEAF",
+      title: "Blog",
+      callback: () => {
+        // eslint-disable-next-line no-console
+        console.log("Blog");
+      },
+    },
+    {
+      kind: "LEAF",
+      title: "Recommendations",
+      callback: () => {
+        // eslint-disable-next-line no-console
+        console.log("Recommendations");
+      },
+    },
+    {
+      kind: "LEAF",
+      title: "Contact",
+      callback: () => {
+        // eslint-disable-next-line no-console
+        console.log("Contact");
+      },
+    },
+  ];
+
   return (
-    <>
+    <div className="container">
       <div className="app">
         <div className="window">
           <TopBar />
-          <Menu
-            elements={[
-              {
-                kind: "NODE",
-                title: "File",
-                elements: [
-                  {
-                    kind: "LEAF",
-                    title: "New",
-                    callback: clearCanvas,
-                  },
-                  {
-                    kind: "LEAF",
-                    title: "Save",
-                    callback: () => {
-                      // eslint-disable-next-line no-console
-                      console.log("Save");
-                    },
-                  },
-                ],
-              },
-              {
-                kind: "LEAF",
-                title: "About",
-                callback: () => {
-                  // eslint-disable-next-line no-console
-                  console.log("About");
-                },
-              },
-              {
-                kind: "LEAF",
-                title: "Blog",
-                callback: () => {
-                  // eslint-disable-next-line no-console
-                  console.log("Blog");
-                },
-              },
-              {
-                kind: "LEAF",
-                title: "Recommendations",
-                callback: () => {
-                  // eslint-disable-next-line no-console
-                  console.log("Recommendations");
-                },
-              },
-              {
-                kind: "LEAF",
-                title: "Contact",
-                callback: () => {
-                  // eslint-disable-next-line no-console
-                  console.log("Contact");
-                },
-              },
-            ]}
-          />
+          <Menu elements={menuElements} />
           <div className="main">
             <Toolbar
               activeTool={activeTool}
@@ -144,7 +152,7 @@ function App() {
         </div>
       </div>
       <Socials />
-    </>
+    </div>
   );
 }
 
