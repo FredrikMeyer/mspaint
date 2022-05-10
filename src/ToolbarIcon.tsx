@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./Toolbar.module.scss";
 
 type ToolbarIconProperties = {
   n: number;
@@ -14,16 +15,14 @@ export default function ToolbarIcon(properties: ToolbarIconProperties) {
 
   return (
     <div
-      style={{ border: "1px solid black", height: `${h}px`, width: `${w}px` }}
+      className={styles["toolbar-icon"]}
+      style={{ height: `${h}px`, width: `${w}px` }}
     >
       <img
         src={`/icons/${n}.png`}
-        style={{
-          margin: "0px",
-          height: `${h}px`,
-          width: `${w}px`,
-          filter: marked ? `invert(1)` : undefined,
-        }}
+        height={`${h}px`}
+        width={`${w}px`}
+        className={marked ? styles["toolbar-icon-marked"] : undefined}
         onClick={setAsActive}
       />
     </div>

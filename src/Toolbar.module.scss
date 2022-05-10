@@ -19,6 +19,18 @@
   align-content: flex-start;
 }
 
+.toolbar-icon {
+  border: 1px solid black;
+
+  img {
+    margin: 0;
+  }
+}
+
+.toolbar-icon-marked {
+  filter: invert(1);
+}
+
 .tool-size {
   border: 1px solid black;
   margin-bottom: 10px;

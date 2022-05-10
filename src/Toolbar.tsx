@@ -21,9 +21,7 @@ export default function Toolbar({
   toolSize: number;
   setToolSize: (s: number) => void;
 }) {
-  const activeToolIndex = React.useMemo(() => {
-    return toolMap[activeTool];
-  }, [activeTool]);
+  const activeToolIndex = toolMap[activeTool];
 
   return (
     <div className={styles.toolbar}>
