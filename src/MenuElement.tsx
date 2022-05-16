@@ -55,9 +55,11 @@ export default function MenuElement({ prop }: { prop: MenuElementProp }) {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useDropdownVisible(false);
 
+  const callback =
+    prop.kind == "NODE" ? () => setIsComponentVisible(true) : prop.callback;
   return (
     <div className={styles["menu-element"]} ref={ref}>
-      <div onClick={() => setIsComponentVisible(true)}>{prop.title}</div>
+      <div onClick={callback}>{prop.title}</div>
       {prop.kind == "NODE" ? (
         <Dropdown show={isComponentVisible}>
           {prop.elements.map((el) => {

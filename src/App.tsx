@@ -86,8 +86,7 @@ function App() {
       kind: "LEAF",
       title: "Blog",
       callback: () => {
-        // eslint-disable-next-line no-console
-        console.log("Blog");
+        window.location.href = "https://blog.fredrikmeyer.net/";
       },
     },
     {
