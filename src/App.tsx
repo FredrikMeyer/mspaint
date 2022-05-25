@@ -85,6 +85,7 @@ function App() {
     {
       kind: "LEAF",
       title: "Blog",
+      shortcut: "b",
       callback: () => {
         window.location.href = "https://blog.fredrikmeyer.net/";
       },

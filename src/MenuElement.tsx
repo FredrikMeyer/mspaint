@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./MenuElement.module.scss";
-import { NonEmptyArray } from "./types";
+import { NonEmptyArray, Optional } from "./types";
 
 /**
  * Found here https://stackoverflow.com/a/45323523/1013553
@@ -39,26 +39,70 @@ function Dropdown({
   return <div className={classes}>{children}</div>;
 }
 
+function useShortcutListener(
+  active: boolean,
+  shortcut: Optional<string>,
+  callback: Optional<() => void>
+) {
+  React.useEffect(() => {
+    const eventListener = (ev: KeyboardEvent) => {
+      const upper = shortcut?.toUpperCase();
+      if (ev.code === `Key${upper}`) {
+        if (callback) {
+          callback();
+        }
+      }
+    };
+    if (shortcut && active) {
+      document.addEventListener("keydown", eventListener);
+    }
+    return () => {
+      if (shortcut) document.removeEventListener("keydown", eventListener);
+    };
+  }, [active, callback, shortcut]);
+}
+
 export type MenuElementProp =
   | {
       kind: "LEAF";
       title: string;
+      shortcut?: string;
       callback: () => void;
     }
   | {
       kind: "NODE";
       title: string;
+      shortcut?: string;
       elements: NonEmptyArray<MenuElementProp>;
     };
 
-export default function MenuElement({ prop }: { prop: MenuElementProp }) {
+export default function MenuElement({
+  prop,
+  marked,
+  listenForKey,
+}: {
+  prop: MenuElementProp;
+  marked: boolean;
+  listenForKey: boolean;
+}) {
   const { ref, isComponentVisible, setIsComponentVisible } =
     useDropdownVisible(false);
 
   const callback =
     prop.kind == "NODE" ? () => setIsComponentVisible(true) : prop.callback;
+
+  useShortcutListener(
+    listenForKey,
+    prop.shortcut,
+    (prop.kind == "LEAF" && prop.callback) || undefined
+  );
   return (
-    <div className={styles["menu-element"]} ref={ref}>
+    <div
+      className={`${styles["menu-element"]} ${
+        marked ? styles["menu-element-marked"] : ""
+      }`}
+      ref={ref}
+    >
       <div onClick={callback}>{prop.title}</div>
       {prop.kind == "NODE" ? (
         <Dropdown show={isComponentVisible}>
