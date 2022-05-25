@@ -50,3 +50,5 @@ See [[https://www.youtube.com/watch?v=xVIgqs4KpMA][this YouTube video]].
 [[https://www.pcjs.org/software/pcx86/sys/windows/3.10/][Windows 3.10 emulator]].
 
 [[https://usehooks-ts.com/react-hook/use-debounce][React hooks-inspiration]]
+
+[[https://github.com/streamich/react-use][react-use]] (mange hooks)
