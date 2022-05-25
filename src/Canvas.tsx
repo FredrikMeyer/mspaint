@@ -48,9 +48,6 @@ export default function Canvas({
         ctx.fillText("Welcome", 10, 150);
         ctx.font = `${fontSize / 2}px serif`;
         ctx.fillText("draw here", 10, 250);
-
-        ctx.font = `${fontSize / 4}px serif`;
-        ctx.fillText("under construction ;)", 10, 300);
       } else {
         // eslint-disable-next-line no-console
         console.error("No canvas ctx yet");
