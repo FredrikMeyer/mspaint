@@ -5,10 +5,11 @@ type ToolbarIconProperties = {
   n: number;
   marked: boolean;
   setAsActive: () => void;
+  altText: string;
 };
 
 export default function ToolbarIcon(properties: ToolbarIconProperties) {
-  const { n, marked, setAsActive } = properties;
+  const { n, marked, setAsActive, altText } = properties;
 
   const w = 41;
   const h = 45;
@@ -24,6 +25,7 @@ export default function ToolbarIcon(properties: ToolbarIconProperties) {
         width={`${w}px`}
         className={marked ? styles["toolbar-icon-marked"] : undefined}
         onClick={setAsActive}
+        alt={altText}
       />
     </div>
   );

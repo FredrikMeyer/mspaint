@@ -33,6 +33,7 @@ export default function Toolbar({
               n={i}
               marked={i == activeToolIndex}
               setAsActive={() => setActiveTool(rToolMap[i] ?? i)}
+              altText={rToolMap[i] ?? "No function here yet."}
             />
           ))}
         </div>
