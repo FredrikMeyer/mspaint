@@ -28,9 +28,9 @@ jobs:
       - run: yarn build
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          role-to-assume: arn:aws:iam::069789945428:role/Generert-GithubPublishRole7244AB40-1275QBLOO4UYA
+          role-to-assume: arn:aws:iam::069789945428:role/Homepage-GithubPublishRole7244AB40-JU1NEBBS4GP7
           role-session-name: github-actions-publish
           aws-region: eu-north-1
       - name: Publish docs
