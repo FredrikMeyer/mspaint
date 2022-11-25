@@ -11,7 +11,7 @@ See result in [[https://paint.fredrikmeyer.net/][paint.fredrikmeyer.net]].
 
 * Install and run
 
-Do =yarn install= and =yarn dev=.
+Do =yarn install= and =yarn start=.
 
 * Build
 
