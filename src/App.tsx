@@ -87,7 +87,7 @@ function App() {
       title: "Blog",
       shortcut: "b",
       callback: () => {
-        window.location.href = "https://blog.fredrikmeyer.net/";
+        window.location.href = "https://fredrikmeyer.net/";
       },
     },
     {
