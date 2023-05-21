@@ -6,10 +6,15 @@ import { DrawingTool } from "./types";
 const toolMap: Record<DrawingTool, number> = {
   DRAW: 7,
   ERASE: 5,
+  LINE: 9,
   NOOP: -1,
 };
 
-const rToolMap: Record<number, DrawingTool> = { 7: "DRAW", 5: "ERASE" };
+const rToolMap: Record<number, DrawingTool> = {
+  7: "DRAW",
+  5: "ERASE",
+  9: "LINE",
+};
 
 export default function Toolbar({
   activeTool,

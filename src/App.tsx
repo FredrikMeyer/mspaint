@@ -17,10 +17,8 @@ function App() {
   const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
   const [toolSize, setToolSize] = React.useState<number>(1);
 
-  const [canvasHeight, setCanvasHeight] =
-    React.useState<Optional<number>>(undefined);
-  const [canvasWidth, setCanvasWidth] =
-    React.useState<Optional<number>>(undefined);
+  const [canvasDimensions, setCanvasDimensions] =
+    React.useState<Optional<[number, number]>>();
 
   React.useEffect(() => {
     const current = canvasContainerRef.current;
@@ -28,8 +26,7 @@ function App() {
       const height = current.clientHeight;
       const width = current.clientWidth;
 
-      setCanvasHeight(height);
-      setCanvasWidth(width);
+      setCanvasDimensions([height, width]);
     } else {
       // eslint-disable-next-line no-console
       console.log("No current!!");
@@ -39,13 +36,14 @@ function App() {
   const clearCanvas = React.useCallback(() => {
     const ctx = canvasRef.current?.getContext("2d");
 
-    if (ctx && canvasWidth && canvasHeight) {
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    if (ctx && canvasDimensions) {
+      const [height, width] = canvasDimensions;
+      ctx.clearRect(0, 0, width, height);
     } else {
       // eslint-disable-next-line no-console
       console.error("No ctx!");
     }
-  }, [canvasRef, canvasHeight, canvasWidth]);
+  }, [canvasRef, canvasDimensions]);
 
   const menuElements: MenuElementProp[] = [
     {
@@ -128,15 +126,15 @@ function App() {
                   id="canvas"
                   ref={canvasContainerRef}
                 >
-                  {canvasHeight && canvasWidth ? (
+                  {canvasDimensions && canvasContainerRef.current ? (
                     <Canvas
                       activeTool={activeTool}
-                      containerRef={canvasContainerRef}
+                      container={canvasContainerRef.current}
                       canvasRef={canvasRef}
                       currentColor={currentColor}
                       toolSize={toolSize}
-                      height={canvasHeight}
-                      width={canvasWidth}
+                      height={canvasDimensions[0]}
+                      width={canvasDimensions[1]}
                     />
                   ) : (
                     "No canvas loaded"
