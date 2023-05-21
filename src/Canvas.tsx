@@ -1,5 +1,6 @@
 import React from "react";
 import { DrawingTool } from "./types";
+import "./Canvas.scss";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   const current = reference.current;
@@ -8,36 +9,147 @@ function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   return { ctx: ctx };
 }
 
-export default function Canvas({
-  width,
-  height,
-  containerRef,
-  canvasRef,
-  currentColor,
+function touchEventToCoords(
+  ev: React.TouchEvent<HTMLCanvasElement>,
+  top: number,
+  left: number
+) {
+  const x = ev.touches[0].clientX - left;
+  const y = ev.touches[0].clientY - top;
+
+  return [x, y];
+}
+
+function mouseEventToCoords(
+  ev: React.MouseEvent<HTMLCanvasElement>,
+  top: number,
+  left: number
+) {
+  const x = ev.clientX - left;
+  const y = ev.clientY - top;
+
+  return [x, y];
+}
+
+function DrawingCanvas({
   activeTool,
   toolSize,
+  currentColor,
+  width,
+  height,
+  canvasRef,
+  leftTop,
+  onCommit,
 }: {
   activeTool: DrawingTool;
+  toolSize: number;
+  currentColor: string;
   width: number;
   height: number;
-  containerRef: React.RefObject<HTMLDivElement>;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  currentColor: string;
-  toolSize: number;
+  leftTop: { left: number; top: number };
+  onCommit: () => void;
 }) {
+  const [drawingState, setDrawingState] = React.useState<
+    { tool: "LINE"; startPoint: [number, number] } | undefined
+  >(undefined);
   const { ctx } = useCtx(canvasRef);
 
-  const [left, setLeft] = React.useState(0);
-  const [top, setTop] = React.useState(0);
+  const onDrawStart = React.useCallback(
+    (x: number, y: number) => {
+      if (activeTool === "LINE") {
+        ctx?.moveTo(x, y);
+      } else {
+        ctx?.beginPath();
+      }
+    },
+    [ctx, activeTool]
+  );
 
-  React.useEffect(() => {
-    const boundingRect = containerRef.current?.getBoundingClientRect();
-    if (boundingRect) {
-      setLeft(boundingRect.left);
-      setTop(boundingRect.top);
-    }
-  }, [containerRef]);
+  const onMove = React.useCallback(
+    (ctx: CanvasRenderingContext2D, x: number, y: number) => {
+      ctx.lineWidth = toolSize;
+      ctx.strokeStyle = currentColor;
+      if (activeTool === "LINE" && drawingState?.tool === "LINE") {
+        const [startX, startY] = drawingState.startPoint;
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        return;
+      }
+      if (activeTool == "DRAW") {
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      } else if (activeTool == "ERASE") {
+        ctx.strokeStyle = "white";
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+    },
 
+    [currentColor, activeTool, toolSize, height, width, drawingState]
+  );
+  return (
+    <canvas
+      id="drawing-canvas"
+      ref={canvasRef}
+      width={width}
+      height={height}
+      onTouchStart={(e) => {
+        const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
+        onDrawStart(x, y);
+      }}
+      onTouchMove={(e) => {
+        const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
+
+        if (ctx) {
+          onMove(ctx, x, y);
+        }
+      }}
+      onTouchEnd={(e) => {
+        if (ctx) {
+          const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
+          if (activeTool === "LINE") {
+            ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+      }}
+      onMouseDown={(e) => {
+        const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
+        setDrawingState({ tool: "LINE", startPoint: [x, y] });
+        onDrawStart(x, y);
+      }}
+      onMouseMove={(e) => {
+        if (e.buttons !== 1) return;
+
+        const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
+
+        if (ctx) {
+          onMove(ctx, x, y);
+        }
+      }}
+      onMouseUp={() => {
+        if (ctx) {
+          setDrawingState(undefined);
+          onCommit();
+        }
+      }}
+    ></canvas>
+  );
+}
+
+function BackgroundCanvas({
+  width,
+  height,
+  canvasRef,
+}: {
+  width: number;
+  height: number;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+}) {
   React.useEffect(() => {
     const current = canvasRef.current;
     if (current) {
@@ -54,57 +166,84 @@ export default function Canvas({
       }
     } else {
       // eslint-disable-next-line no-console
-      console.error("No ref! (ie canvas was not mounted)");
+      console.error("No background ref! (ie canvas was not mounted)");
     }
   }, [canvasRef, width]);
-
-  const onTouchStart = React.useCallback(() => {
-    ctx?.beginPath();
-  }, [ctx]);
-
-  const onMove = React.useCallback(
-    (ctx: CanvasRenderingContext2D, x: number, y: number) => {
-      if (activeTool == "DRAW") {
-        ctx.strokeStyle = currentColor;
-      } else if (activeTool == "ERASE") {
-        ctx.strokeStyle = "white";
-      }
-      ctx.lineWidth = toolSize;
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    },
-    [currentColor, activeTool, toolSize]
-  );
-
   return (
     <canvas
-      ref={canvasRef}
+      id="background-canvas"
       width={width}
       height={height}
-      onTouchStart={onTouchStart}
-      onTouchMove={(e) => {
-        const x = e.touches[0].clientX - left;
-        const y = e.touches[0].clientY - top;
-        if (ctx) {
-          onMove(ctx, x, y);
-        }
-      }}
-      onMouseDown={onTouchStart}
-      onMouseMove={(e) => {
-        if (e.buttons !== 1) return;
-
-        const x = e.clientX - left;
-        const y = e.clientY - top;
-
-        if (ctx) {
-          onMove(ctx, x, y);
-        }
-      }}
-      onMouseUp={() => {
-        if (ctx) {
-          ctx.stroke();
-        }
-      }}
+      ref={canvasRef}
     ></canvas>
+  );
+}
+
+export default function Canvas({
+  width,
+  height,
+  container,
+  canvasRef,
+  currentColor,
+  activeTool,
+  toolSize,
+}: {
+  activeTool: DrawingTool;
+  width: number;
+  height: number;
+  container: HTMLDivElement;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  currentColor: string;
+  toolSize: number;
+}) {
+  // TODO: https://react.dev/reference/react/forwardRef
+  // Use useImperativeHandle so that App.tsx doesn't need to know about internals of canvas
+  const drawingCanvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  const [leftTop, setLeftTop] = React.useState<
+    { left: number; top: number } | undefined
+  >(undefined);
+
+  React.useLayoutEffect(() => {
+    const boundingRect = container.getBoundingClientRect();
+    if (boundingRect) {
+      const { left, top } = boundingRect;
+      setLeftTop({ left, top });
+    }
+  }, [container]);
+
+  const onCommit = React.useCallback(() => {
+    if (drawingCanvasRef.current) {
+      const drawingCanvas = drawingCanvasRef.current;
+      const context = drawingCanvas.getContext("2d");
+      if (context) {
+        const backgroundContext = canvasRef.current?.getContext("2d");
+
+        if (backgroundContext) {
+          backgroundContext.globalCompositeOperation = "source-over";
+          backgroundContext.drawImage(drawingCanvas, 0, 0);
+        }
+
+        context.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+      }
+    }
+  }, [canvasRef]);
+
+  return (
+    <>
+      <BackgroundCanvas canvasRef={canvasRef} width={width} height={height} />
+      {leftTop && (
+        <DrawingCanvas
+          toolSize={toolSize}
+          currentColor={currentColor}
+          leftTop={leftTop}
+          activeTool={activeTool}
+          canvasRef={drawingCanvasRef}
+          width={width}
+          height={height}
+          onCommit={onCommit}
+        />
+      )}
+    </>
   );
 }
