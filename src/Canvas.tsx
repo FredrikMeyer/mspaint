@@ -99,6 +99,9 @@ function DrawingCanvas({
       height={height}
       onTouchStart={(e) => {
         const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
+        if (activeTool === "LINE") {
+          setDrawingState({ tool: "LINE", startPoint: [x, y] });
+        }
         onDrawStart(x, y);
       }}
       onTouchMove={(e) => {
@@ -108,18 +111,17 @@ function DrawingCanvas({
           onMove(ctx, x, y);
         }
       }}
-      onTouchEnd={(e) => {
+      onTouchEnd={() => {
         if (ctx) {
-          const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
-          if (activeTool === "LINE") {
-            ctx.lineTo(x, y);
-          }
-          ctx.stroke();
+          setDrawingState(undefined);
+          onCommit();
         }
       }}
       onMouseDown={(e) => {
         const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
-        setDrawingState({ tool: "LINE", startPoint: [x, y] });
+        if (activeTool === "LINE") {
+          setDrawingState({ tool: "LINE", startPoint: [x, y] });
+        }
         onDrawStart(x, y);
       }}
       onMouseMove={(e) => {
