@@ -51,7 +51,9 @@ function DrawingCanvas({
   onCommit: () => void;
 }) {
   const [drawingState, setDrawingState] = React.useState<
-    { tool: "LINE"; startPoint: [number, number] } | undefined
+    | { tool: "LINE"; startPoint: [number, number] }
+    | { tool: "SQUARE"; startPoint: [number, number] }
+    | undefined
   >(undefined);
   const { ctx } = useCtx(canvasRef);
 
@@ -79,6 +81,15 @@ function DrawingCanvas({
         ctx.stroke();
         return;
       }
+      if (activeTool === "SQUARE" && drawingState?.tool === "SQUARE") {
+        const [startX, startY] = drawingState.startPoint;
+        ctx.clearRect(0, 0, width, height);
+        const rectWidth = x - startX;
+        const rectHeight = y - startY;
+        ctx.strokeRect(startX, startY, rectWidth, rectHeight);
+        ctx.stroke();
+        return;
+      }
       if (activeTool == "DRAW") {
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -97,6 +108,9 @@ function DrawingCanvas({
       const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
       if (activeTool === "LINE") {
         setDrawingState({ tool: "LINE", startPoint: [x, y] });
+      }
+      if (activeTool === "SQUARE") {
+        setDrawingState({ tool: "SQUARE", startPoint: [x, y] });
       }
       onDrawStart(x, y);
     },
