@@ -3,8 +3,19 @@ import { DrawingTool } from "./types";
 import "./Canvas.scss";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
-  const current = reference.current;
-  const ctx = current?.getContext("2d");
+  const [ctx, setCtx] = React.useState<CanvasRenderingContext2D | undefined>(
+    undefined
+  );
+
+  React.useEffect(() => {
+    const canvasElement = reference.current;
+    if (canvasElement !== null) {
+      const context = canvasElement.getContext("2d");
+      if (context) {
+        setCtx(context);
+      }
+    }
+  }, [reference]);
 
   return { ctx: ctx };
 }
@@ -80,34 +91,47 @@ function DrawingCanvas({
 
     [currentColor, activeTool, toolSize, height, width, drawingState]
   );
+
+  const onPointerDown = React.useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
+      if (activeTool === "LINE") {
+        setDrawingState({ tool: "LINE", startPoint: [x, y] });
+      }
+      onDrawStart(x, y);
+    },
+    [activeTool, leftTop.left, leftTop.top, onDrawStart]
+  );
+
+  const onPointerMove = React.useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      if (e.buttons !== 1) return;
+
+      const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
+
+      if (ctx) {
+        onMove(ctx, x, y);
+      }
+    },
+    [ctx, leftTop.left, leftTop.top, onMove]
+  );
+
+  const onPointerUp = React.useCallback(() => {
+    if (ctx) {
+      setDrawingState(undefined);
+      onCommit();
+    }
+  }, [ctx, onCommit]);
+
   return (
     <canvas
       id="drawing-canvas"
       ref={canvasRef}
       width={width}
       height={height}
-      onPointerDown={(e) => {
-        const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
-        if (activeTool === "LINE") {
-          setDrawingState({ tool: "LINE", startPoint: [x, y] });
-        }
-        onDrawStart(x, y);
-      }}
-      onPointerMove={(e) => {
-        if (e.buttons !== 1) return;
-
-        const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
-
-        if (ctx) {
-          onMove(ctx, x, y);
-        }
-      }}
-      onPointerUp={() => {
-        if (ctx) {
-          setDrawingState(undefined);
-          onCommit();
-        }
-      }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
     ></canvas>
   );
 }
