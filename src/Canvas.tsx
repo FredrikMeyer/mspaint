@@ -9,17 +9,6 @@ function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   return { ctx: ctx };
 }
 
-function touchEventToCoords(
-  ev: React.TouchEvent<HTMLCanvasElement>,
-  top: number,
-  left: number
-) {
-  const x = ev.touches[0].clientX - left;
-  const y = ev.touches[0].clientY - top;
-
-  return [x, y];
-}
-
 function mouseEventToCoords(
   ev: React.MouseEvent<HTMLCanvasElement>,
   top: number,
@@ -97,34 +86,14 @@ function DrawingCanvas({
       ref={canvasRef}
       width={width}
       height={height}
-      onTouchStart={(e) => {
-        const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
-        if (activeTool === "LINE") {
-          setDrawingState({ tool: "LINE", startPoint: [x, y] });
-        }
-        onDrawStart(x, y);
-      }}
-      onTouchMove={(e) => {
-        const [x, y] = touchEventToCoords(e, leftTop.top, leftTop.left);
-
-        if (ctx) {
-          onMove(ctx, x, y);
-        }
-      }}
-      onTouchEnd={() => {
-        if (ctx) {
-          setDrawingState(undefined);
-          onCommit();
-        }
-      }}
-      onMouseDown={(e) => {
+      onPointerDown={(e) => {
         const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
         if (activeTool === "LINE") {
           setDrawingState({ tool: "LINE", startPoint: [x, y] });
         }
         onDrawStart(x, y);
       }}
-      onMouseMove={(e) => {
+      onPointerMove={(e) => {
         if (e.buttons !== 1) return;
 
         const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
@@ -133,7 +102,7 @@ function DrawingCanvas({
           onMove(ctx, x, y);
         }
       }}
-      onMouseUp={() => {
+      onPointerUp={() => {
         if (ctx) {
           setDrawingState(undefined);
           onCommit();
