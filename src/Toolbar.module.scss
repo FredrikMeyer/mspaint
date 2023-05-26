@@ -20,6 +20,7 @@
 
 .toolbar-icon {
   border: 1px solid black;
+  cursor:  pointer;
 
   img {
     margin: 0;
@@ -28,6 +29,11 @@
 
 .toolbar-icon-marked {
   filter: invert(1);
+}
+
+.toolbar-icon-not-implemented {
+  filter: blur(2px);
+  cursor: not-allowed;
 }
 
 .tool-size {

@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Toolbar.module.scss";
+import cn from "classnames";
 
 type ToolbarIconProperties = {
   n: number;
@@ -24,13 +25,12 @@ export default function ToolbarIcon(properties: ToolbarIconProperties) {
         src={`/icons/${n}.png`}
         height={`${h}px`}
         width={`${w}px`}
-        className={marked ? styles["toolbar-icon-marked"] : undefined}
+        className={cn(
+          marked ? styles["toolbar-icon-marked"] : undefined,
+          !implemented && styles["toolbar-icon-not-implemented"]
+        )}
         onClick={setAsActive}
         alt={altText}
-        style={{
-          filter: implemented ? "unset" : "blur(2px)",
-          cursor: implemented ? "pointer" : "unset",
-        }}
       />
     </div>
   );
