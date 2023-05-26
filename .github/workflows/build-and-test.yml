@@ -28,7 +28,7 @@ jobs:
       - run: yarn build
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::069789945428:role/Homepage-GithubPublishRole7244AB40-JU1NEBBS4GP7
           role-session-name: github-actions-publish
