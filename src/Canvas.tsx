@@ -90,6 +90,16 @@ function DrawingCanvas({
         ctx.stroke();
         return;
       }
+      if (activeTool === "ROUNDED_RECT" && drawingState?.tool === "SQUARE") {
+        const [startX, startY] = drawingState.startPoint;
+        ctx.clearRect(0, 0, width, height);
+        const rectWidth = x - startX;
+        const rectHeight = y - startY;
+        ctx.beginPath();
+        ctx.roundRect(startX, startY, rectWidth, rectHeight, 20);
+        ctx.stroke();
+        return;
+      }
       if (activeTool == "DRAW") {
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -110,6 +120,9 @@ function DrawingCanvas({
         setDrawingState({ tool: "LINE", startPoint: [x, y] });
       }
       if (activeTool === "SQUARE") {
+        setDrawingState({ tool: "SQUARE", startPoint: [x, y] });
+      }
+      if (activeTool === "ROUNDED_RECT") {
         setDrawingState({ tool: "SQUARE", startPoint: [x, y] });
       }
       onDrawStart(x, y);

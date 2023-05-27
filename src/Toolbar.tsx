@@ -9,6 +9,7 @@ const toolMap: Record<DrawingTool, number> = {
   LINE: 9,
   SQUARE: 10,
   NOOP: -1,
+  ROUNDED_RECT: 12,
 };
 
 const rToolMap: Record<number, DrawingTool> = {
@@ -16,6 +17,7 @@ const rToolMap: Record<number, DrawingTool> = {
   5: "ERASE",
   9: "LINE",
   10: "SQUARE",
+  12: "ROUNDED_RECT",
 };
 
 export default function Toolbar({
