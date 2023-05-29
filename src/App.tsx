@@ -1,8 +1,8 @@
 import React from "react";
-import type { DrawingTool, Optional } from "./types";
+import type { Optional } from "./types";
 import "./App.scss";
 import Canvas from "./Canvas";
-import Toolbar from "./Toolbar";
+import Toolbar, { DrawingTool } from "./Toolbar";
 import Menu from "./Menu";
 import TopBar from "./TopBar";
 import ColorPicker from "./ColorPicker";

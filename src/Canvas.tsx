@@ -1,5 +1,5 @@
 import React from "react";
-import { DrawingTool } from "./types";
+import { DrawingTool } from "./Toolbar";
 import "./Canvas.scss";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
@@ -53,6 +53,7 @@ function DrawingCanvas({
   const [drawingState, setDrawingState] = React.useState<
     | { tool: "LINE"; startPoint: [number, number] }
     | { tool: "SQUARE"; startPoint: [number, number] }
+    | { tool: "CIRCLE"; startPoint: [number, number] }
     | undefined
   >(undefined);
   const { ctx } = useCtx(canvasRef);
@@ -100,6 +101,24 @@ function DrawingCanvas({
         ctx.stroke();
         return;
       }
+      if (activeTool === "CIRCLE" && drawingState?.tool === "CIRCLE") {
+        const [startX, startY] = drawingState.startPoint;
+        ctx.clearRect(0, 0, width, height);
+        const rectWidth = x - startX;
+        const rectHeight = y - startY;
+
+        const r = Math.sqrt(Math.pow(rectWidth, 2) + Math.pow(rectHeight, 2));
+        const rx = Math.abs(rectWidth);
+        const ry = Math.abs(rectHeight);
+
+        const cx = startX + 0.5 * rectWidth;
+        const cy = startY + 0.5 * rectHeight;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 0.5 * rx, 0.5 * ry, 0, 0, Math.PI * 2);
+
+        ctx.stroke();
+        return;
+      }
       if (activeTool == "DRAW") {
         ctx.lineTo(x, y);
         ctx.stroke();
@@ -124,6 +143,9 @@ function DrawingCanvas({
       }
       if (activeTool === "ROUNDED_RECT") {
         setDrawingState({ tool: "SQUARE", startPoint: [x, y] });
+      }
+      if (activeTool === "CIRCLE") {
+        setDrawingState({ tool: "CIRCLE", startPoint: [x, y] });
       }
       onDrawStart(x, y);
     },

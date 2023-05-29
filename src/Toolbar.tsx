@@ -1,24 +1,22 @@
 import React from "react";
 import ToolbarIcon from "./ToolbarIcon";
 import styles from "./Toolbar.module.scss";
-import { DrawingTool } from "./types";
 
-const toolMap: Record<DrawingTool, number> = {
+const toolMap = {
   DRAW: 7,
   ERASE: 5,
   LINE: 9,
   SQUARE: 10,
   NOOP: -1,
   ROUNDED_RECT: 12,
-};
+  CIRCLE: 14,
+} as const;
 
-const rToolMap: Record<number, DrawingTool> = {
-  7: "DRAW",
-  5: "ERASE",
-  9: "LINE",
-  10: "SQUARE",
-  12: "ROUNDED_RECT",
-};
+export type DrawingTool = keyof typeof toolMap;
+
+const rToolMap = Object.fromEntries(
+  Object.entries(toolMap).map(([key, val]) => [val, key as DrawingTool])
+) as Record<number, DrawingTool>;
 
 export default function Toolbar({
   activeTool,
