@@ -9,14 +9,22 @@ import ColorPicker from "./ColorPicker";
 import Socials from "./Socials";
 import { MenuElementProp } from "./MenuElement";
 
-function App() {
-  const canvasContainerRef = React.useRef<HTMLDivElement>(null);
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+function useClearCanvasByKey(clearCanvas: () => void) {
+  React.useEffect(() => {
+    const listener = (ev: KeyboardEvent) => {
+      if (ev.code === "KeyN") {
+        clearCanvas();
+      }
+    };
+    window.addEventListener("keypress", listener);
 
-  const [currentColor, setCurrentColor] = React.useState<string>("black");
-  const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
-  const [toolSize, setToolSize] = React.useState<number>(1);
+    return () => window.removeEventListener("keypress", listener);
+  }, [clearCanvas]);
+}
 
+function useCanvasDimension(
+  canvasContainerRef: React.RefObject<HTMLDivElement>
+) {
   const [canvasDimensions, setCanvasDimensions] =
     React.useState<Optional<[number, number]>>();
 
@@ -31,7 +39,20 @@ function App() {
       // eslint-disable-next-line no-console
       console.log("No current!!");
     }
-  }, []);
+  }, [canvasContainerRef]);
+
+  return canvasDimensions;
+}
+
+function App() {
+  const canvasContainerRef = React.useRef<HTMLDivElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  const [currentColor, setCurrentColor] = React.useState<string>("black");
+  const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
+  const [toolSize, setToolSize] = React.useState<number>(1);
+
+  const canvasDimensions = useCanvasDimension(canvasContainerRef);
 
   const clearCanvas = React.useCallback(() => {
     const ctx = canvasRef.current?.getContext("2d");
@@ -44,6 +65,8 @@ function App() {
       console.error("No ctx!");
     }
   }, [canvasRef, canvasDimensions]);
+
+  useClearCanvasByKey(clearCanvas);
 
   const menuElements: MenuElementProp[] = [
     {
@@ -130,7 +153,7 @@ function App() {
                     <Canvas
                       activeTool={activeTool}
                       container={canvasContainerRef.current}
-                      canvasRef={canvasRef}
+                      backgroundCanvasRef={canvasRef}
                       currentColor={currentColor}
                       toolSize={toolSize}
                       height={canvasDimensions[0]}

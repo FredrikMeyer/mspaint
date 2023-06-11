@@ -3,6 +3,7 @@ import ToolbarIcon from "./ToolbarIcon";
 import styles from "./Toolbar.module.scss";
 
 const toolMap = {
+  FILL: 6,
   DRAW: 7,
   ERASE: 5,
   LINE: 9,
