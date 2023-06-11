@@ -38,6 +38,7 @@ function DrawingCanvas({
   width,
   height,
   canvasRef,
+  backgroundCanvasRef,
   leftTop,
   onCommit,
 }: {
@@ -47,6 +48,7 @@ function DrawingCanvas({
   width: number;
   height: number;
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement>;
   leftTop: { left: number; top: number };
   onCommit: () => void;
 }) {
@@ -67,6 +69,108 @@ function DrawingCanvas({
       }
     },
     [ctx, activeTool]
+  );
+
+  const floodFill = React.useCallback(
+    (x: number, y: number) => {
+      // 1. Get pixel array of the background canvas
+      // 2. Get the color of the point (x,y)
+      // 3. Use algorithm on pixel array
+      // 4. Put the pixel array back
+
+      const backgroundContext = backgroundCanvasRef.current?.getContext("2d");
+
+      if (!backgroundContext || !backgroundCanvasRef.current) {
+        console.warn("No backgroundContxt!");
+        return;
+      }
+
+      const imageData = backgroundContext.getImageData(
+        0,
+        0,
+        backgroundCanvasRef.current.width,
+        backgroundCanvasRef.current.height
+      );
+
+      const imageDataArray = imageData.data;
+
+      const ptToIndex = (x: number, y: number): number => {
+        return Math.round(y) * width + Math.round(x);
+      };
+
+      const indexToPt = (ind: number): [number, number] => {
+        const x = ind % width;
+        const y = (ind - x) / width;
+
+        return [x, y];
+      };
+
+      const neighboursOfPt = (
+        x: number,
+        y: number
+      ): { x: number; y: number }[] => {
+        // Return neighbours in north/south/etc directions within the frame
+        return [
+          { x: x + 1, y },
+          { x: x - 1, y },
+          { x, y: y - 1 },
+          { x, y: y + 1 },
+        ].filter(({ x, y }) => x >= 0 && x < width && y >= 0 && y <= height);
+      };
+
+      const shouldBeColored = (
+        x: number,
+        y: number,
+        startColor: number,
+        dataArray: Uint32Array
+      ): boolean => {
+        // Check if point is the same color as start color
+
+        const indexOfPt = ptToIndex(x, y);
+
+        const color = dataArray[indexOfPt];
+        return color === startColor;
+      };
+
+      const fillArray = (
+        startX: number,
+        startY: number,
+        newColor: number,
+        dataArray: Uint32Array
+      ) => {
+        const startColor = dataArray[ptToIndex(startX, startY)];
+        const queue: { x: number; y: number }[] = [{ x: startX, y: startY }];
+
+        let current = queue.shift();
+        let i = 0;
+        while (current && i < width * height) {
+          const neigbours = neighboursOfPt(current.x, current.y);
+
+          for (const n of neigbours) {
+            if (shouldBeColored(n.x, n.y, startColor, dataArray)) {
+              queue.push(n);
+              dataArray[ptToIndex(n.x, n.y)] = newColor;
+            }
+          }
+
+          current = queue.shift();
+          i++;
+        }
+      };
+
+      const doFill = () => {
+        imageData.data.set(buf8);
+        backgroundContext.putImageData(imageData, 0, 0);
+      };
+
+      const buf = imageDataArray.buffer;
+      const buf8 = new Uint8ClampedArray(buf);
+      const data = new Uint32Array(buf);
+
+      fillArray(x, y, 4278190080, data);
+      doFill();
+    },
+    [backgroundCanvasRef, height, width]
   );
 
   const onMove = React.useCallback(
@@ -107,7 +211,6 @@ function DrawingCanvas({
         const rectWidth = x - startX;
         const rectHeight = y - startY;
 
-        const r = Math.sqrt(Math.pow(rectWidth, 2) + Math.pow(rectHeight, 2));
         const rx = Math.abs(rectWidth);
         const ry = Math.abs(rectHeight);
 
@@ -147,9 +250,12 @@ function DrawingCanvas({
       if (activeTool === "CIRCLE") {
         setDrawingState({ tool: "CIRCLE", startPoint: [x, y] });
       }
+      if (activeTool == "FILL") {
+        floodFill(x, y);
+      }
       onDrawStart(x, y);
     },
-    [activeTool, leftTop.left, leftTop.top, onDrawStart]
+    [activeTool, leftTop.left, leftTop.top, onDrawStart, floodFill]
   );
 
   const onPointerMove = React.useCallback(
@@ -227,7 +333,7 @@ export default function Canvas({
   width,
   height,
   container,
-  canvasRef,
+  backgroundCanvasRef,
   currentColor,
   activeTool,
   toolSize,
@@ -236,7 +342,7 @@ export default function Canvas({
   width: number;
   height: number;
   container: HTMLDivElement;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement>;
   currentColor: string;
   toolSize: number;
 }) {
@@ -261,7 +367,7 @@ export default function Canvas({
       const drawingCanvas = drawingCanvasRef.current;
       const context = drawingCanvas.getContext("2d");
       if (context) {
-        const backgroundContext = canvasRef.current?.getContext("2d");
+        const backgroundContext = backgroundCanvasRef.current?.getContext("2d");
 
         if (backgroundContext) {
           backgroundContext.globalCompositeOperation = "source-over";
@@ -271,11 +377,22 @@ export default function Canvas({
         context.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
       }
     }
-  }, [canvasRef]);
+  }, [backgroundCanvasRef]);
+
+  React.useEffect(() => {
+    const ctx = drawingCanvasRef.current?.getContext("2d");
+    if (ctx) {
+      ctx.imageSmoothingEnabled = false;
+    }
+  }, []);
 
   return (
     <>
-      <BackgroundCanvas canvasRef={canvasRef} width={width} height={height} />
+      <BackgroundCanvas
+        canvasRef={backgroundCanvasRef}
+        width={width}
+        height={height}
+      />
       {leftTop && (
         <DrawingCanvas
           toolSize={toolSize}
@@ -283,6 +400,7 @@ export default function Canvas({
           leftTop={leftTop}
           activeTool={activeTool}
           canvasRef={drawingCanvasRef}
+          backgroundCanvasRef={backgroundCanvasRef}
           width={width}
           height={height}
           onCommit={onCommit}

@@ -52,3 +52,9 @@ See [[https://www.youtube.com/watch?v=xVIgqs4KpMA][this YouTube video]].
 [[https://usehooks-ts.com/react-hook/use-debounce][React hooks-inspiration]]
 
 [[https://github.com/streamich/react-use][react-use]] (mange hooks)
+
+https://codeheir.com/2022/08/21/comparing-flood-fill-algorithms-in-javascript/
+
+Se den hacker-vidoen (ca 21 min uti), eksempel på tegning. Ideer:rotering, kopering, cut/paste
+
+https://hacks.mozilla.org/2011/12/faster-canvas-pixel-manipulation-with-typed-arrays/
