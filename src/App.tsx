@@ -8,6 +8,7 @@ import TopBar from "./TopBar";
 import ColorPicker from "./ColorPicker";
 import Socials from "./Socials";
 import { MenuElementProp } from "./MenuElement";
+import { COLORS, Color } from "./colors";
 
 function useClearCanvasByKey(clearCanvas: () => void) {
   React.useEffect(() => {
@@ -48,7 +49,7 @@ function App() {
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
-  const [currentColor, setCurrentColor] = React.useState<string>("black");
+  const [currentColor, setCurrentColor] = React.useState<Color>(COLORS.BLACK);
   const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
   const [toolSize, setToolSize] = React.useState<number>(1);
 
