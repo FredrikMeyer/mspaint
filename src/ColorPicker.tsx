@@ -1,46 +1,64 @@
 import React from "react";
 import styles from "./ColorPicker.module.scss";
+import { COLORS, Color } from "./colors";
+
+const {
+  WHITE,
+  LIGHT_GREY,
+  RED,
+  YELLOW,
+  NEON_GREEN,
+  TEAL,
+  BLUE,
+  MAGENTA,
+  PASTEL_YELLOW,
+  LIGHT_MALACHITE_GREEN,
+  WATERSPOUT,
+  MEDIUM_SLATE_BLUE,
+  CERISE_PINK,
+  ATOMIC_TANGERINE,
+} = COLORS;
 
 const row1 = [
-  "rgb(255, 255, 255)",
-  "rgb(191, 191, 191)",
-  "rgb(233, 50, 35)", // light red
-  "rgb(255, 253, 84)", // bright yellow
-  "rgb(117, 249, 76)", // neon green
-  "rgb(115, 251, 253)", // light blue
-  "rgb(0, 30, 245)", // blue
-  "rgb(234, 60, 247)", // magenta
-  "rgb(255, 255, 146)", // yellow-ish
-  "rgb(117, 250, 142)", // yellow-green
-  "rgb(160, 252, 253)", // sky-blue
-  "rgb(127, 131, 247)", // purple
-  "rgb(234, 53, 127)", // pink
-  "rgb(239, 134, 80)", // orange
+  WHITE,
+  LIGHT_GREY,
+  RED,
+  YELLOW,
+  NEON_GREEN,
+  TEAL,
+  BLUE,
+  MAGENTA,
+  PASTEL_YELLOW,
+  LIGHT_MALACHITE_GREEN,
+  WATERSPOUT,
+  MEDIUM_SLATE_BLUE,
+  CERISE_PINK,
+  ATOMIC_TANGERINE,
 ];
 
 const row2 = [
-  "rgb(0, 0, 0)", // black
-  "rgb(128, 128, 128)", // dark grey
-  "rgb(117, 20, 12)", // dark red
-  "rgb(128, 127, 38)", // dark yellow
-  "rgb(55, 125, 34)", // dark neon gren
-  "rgb(54, 126, 127)", // dark teal
-  "rgb(0, 10, 123)", // dark blue
-  "rgb(117, 25, 124)", // dark magenta
-  "rgb(128, 127, 73)", // wheat
-  "rgb(24, 63, 63)", // dark green
-  "rgb(51, 129, 247)", // blue sky dark
-  "rgb(22, 64, 124)", // dark dark blue sky
-  "rgb(57, 15, 123)", // dark purple
-  "rgb(120, 66, 21)", // brown
+  COLORS.BLACK,
+  COLORS.DARK_GREY,
+  COLORS.DARK_RED,
+  COLORS.DARK_YELLOW,
+  COLORS.DARK_NEON_GREEN,
+  COLORS.DARK_TEAL,
+  COLORS.DARK_BLUE,
+  COLORS.DARK_MAGENTA,
+  COLORS.GOLD_FUSION,
+  COLORS.SACRAMENTO_STATE_GREEN,
+  COLORS.BRILLIANT_AZURE,
+  COLORS.DARK_CERULEAN,
+  COLORS.PERSIAN_INDIGO,
+  COLORS.SEPIA,
 ];
 
 export default function ColorPicker({
   currentColor,
   setCurrentColor,
 }: {
-  currentColor: string;
-  setCurrentColor: (c: string) => void;
+  currentColor: Color;
+  setCurrentColor: (c: Color) => void;
 }) {
   return (
     <div className={styles["color-picker"]}>
@@ -48,7 +66,7 @@ export default function ColorPicker({
         <div
           className={styles["current-background-color"]}
           style={{
-            backgroundColor: currentColor,
+            backgroundColor: Color.toRGBString(currentColor),
           }}
         ></div>
       </div>
@@ -57,7 +75,7 @@ export default function ColorPicker({
           {row1.map((c, i) => (
             <div
               key={i}
-              style={{ backgroundColor: c }}
+              style={{ backgroundColor: Color.toRGBString(c) }}
               onClick={() => setCurrentColor(c)}
             ></div>
           ))}
@@ -66,7 +84,7 @@ export default function ColorPicker({
           {row2.map((c, i) => (
             <div
               key={i}
-              style={{ backgroundColor: c }}
+              style={{ backgroundColor: Color.toRGBString(c) }}
               onClick={() => setCurrentColor(c)}
             ></div>
           ))}

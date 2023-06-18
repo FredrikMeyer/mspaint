@@ -1,6 +1,7 @@
 import React from "react";
 import { DrawingTool } from "./Toolbar";
 import "./Canvas.scss";
+import { Color } from "./colors";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   const [ctx, setCtx] = React.useState<CanvasRenderingContext2D | undefined>(
@@ -44,7 +45,7 @@ function DrawingCanvas({
 }: {
   activeTool: DrawingTool;
   toolSize: number;
-  currentColor: string;
+  currentColor: Color;
   width: number;
   height: number;
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -167,16 +168,16 @@ function DrawingCanvas({
       const buf8 = new Uint8ClampedArray(buf);
       const data = new Uint32Array(buf);
 
-      fillArray(x, y, 4278190080, data);
+      fillArray(x, y, Color.to32BitRepresentation(currentColor), data);
       doFill();
     },
-    [backgroundCanvasRef, height, width]
+    [backgroundCanvasRef, height, width, currentColor]
   );
 
   const onMove = React.useCallback(
     (ctx: CanvasRenderingContext2D, x: number, y: number) => {
       ctx.lineWidth = toolSize;
-      ctx.strokeStyle = currentColor;
+      ctx.strokeStyle = Color.toRGBString(currentColor);
       if (activeTool === "LINE" && drawingState?.tool === "LINE") {
         const [startX, startY] = drawingState.startPoint;
         ctx.clearRect(0, 0, width, height);
@@ -343,7 +344,7 @@ export default function Canvas({
   height: number;
   container: HTMLDivElement;
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement>;
-  currentColor: string;
+  currentColor: Color;
   toolSize: number;
 }) {
   // TODO: https://react.dev/reference/react/forwardRef
