@@ -2,7 +2,7 @@ import React from "react";
 import { DrawingTool } from "./Toolbar";
 import "./Canvas.scss";
 import { Color } from "./colors";
-import floodFill from "./floodFill";
+import FloodFiller from "./floodFill";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   const [ctx, setCtx] = React.useState<CanvasRenderingContext2D | undefined>(
@@ -135,6 +135,16 @@ function DrawingCanvas({
     [currentColor, activeTool, toolSize, height, width, drawingState]
   );
 
+  const floodfiller = React.useMemo(
+    () =>
+      backgroundCanvasRef.current
+        ? new FloodFiller(width, height, backgroundCanvasRef.current)
+        : undefined,
+    [width, height, backgroundCanvasRef]
+  );
+
+  console.log("render");
+
   const onPointerDown = React.useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       const [x, y] = mouseEventToCoords(e, leftTop.top, leftTop.left);
@@ -151,9 +161,8 @@ function DrawingCanvas({
         setDrawingState({ tool: "CIRCLE", startPoint: [x, y] });
       }
       if (activeTool == "FILL") {
-        const backgroundCanvas = backgroundCanvasRef.current;
-        if (backgroundCanvas) {
-          floodFill(x, y, backgroundCanvas, width, height, currentColor);
+        if (floodfiller) {
+          floodfiller.floodFill(x, y, currentColor);
         }
       }
       onDrawStart(x, y);
@@ -163,10 +172,8 @@ function DrawingCanvas({
       leftTop.left,
       leftTop.top,
       onDrawStart,
-      backgroundCanvasRef,
+      floodfiller,
       currentColor,
-      width,
-      height,
     ]
   );
 
