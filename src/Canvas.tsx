@@ -30,15 +30,17 @@ function mouseEventToCoords(
   const x = ev.clientX - left;
   const y = ev.clientY - top;
 
-  return [x, y];
+  const scale = window.devicePixelRatio;
+
+  return [x * scale, y * scale];
 }
 
 function DrawingCanvas({
   activeTool,
   toolSize,
   currentColor,
-  width,
-  height,
+  width: originalWidth,
+  height: originalHeight,
   canvasRef,
   backgroundCanvasRef,
   leftTop,
@@ -54,6 +56,12 @@ function DrawingCanvas({
   leftTop: { left: number; top: number };
   onCommit: () => void;
 }) {
+  const [width, height] = useScaleByDevicePixelRatio(
+    canvasRef,
+    originalWidth,
+    originalHeight
+  );
+
   const [drawingState, setDrawingState] = React.useState<
     | { tool: "LINE"; startPoint: [number, number] }
     | { tool: "SQUARE"; startPoint: [number, number] }
@@ -89,19 +97,30 @@ function DrawingCanvas({
       if (activeTool === "SQUARE" && drawingState?.tool === "SQUARE") {
         const [startX, startY] = drawingState.startPoint;
         ctx.clearRect(0, 0, width, height);
-        const rectWidth = x - startX;
-        const rectHeight = y - startY;
-        ctx.strokeRect(startX, startY, rectWidth, rectHeight);
+        const rectWidth = Math.floor(x - startX);
+        const rectHeight = Math.floor(y - startY);
+        ctx.strokeRect(
+          Math.floor(startX) + 0.5,
+          Math.floor(startY) + 0.5,
+          rectWidth,
+          rectHeight
+        );
         ctx.stroke();
         return;
       }
       if (activeTool === "ROUNDED_RECT" && drawingState?.tool === "SQUARE") {
         const [startX, startY] = drawingState.startPoint;
         ctx.clearRect(0, 0, width, height);
-        const rectWidth = x - startX;
-        const rectHeight = y - startY;
+        const rectWidth = Math.floor(x - startX);
+        const rectHeight = Math.floor(y - startY);
         ctx.beginPath();
-        ctx.roundRect(startX, startY, rectWidth, rectHeight, 20);
+        ctx.roundRect(
+          Math.floor(startX) + 0.5,
+          Math.floor(startY) + 0.5,
+          rectWidth,
+          rectHeight,
+          20
+        );
         ctx.stroke();
         return;
       }
@@ -138,12 +157,10 @@ function DrawingCanvas({
   const floodfiller = React.useMemo(
     () =>
       backgroundCanvasRef.current
-        ? new FloodFiller(width, height, backgroundCanvasRef.current)
+        ? new FloodFiller(backgroundCanvasRef.current)
         : undefined,
-    [width, height, backgroundCanvasRef]
+    [backgroundCanvasRef]
   );
-
-  console.log("render");
 
   const onPointerDown = React.useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -210,15 +227,59 @@ function DrawingCanvas({
   );
 }
 
+function useScaleByDevicePixelRatio(
+  canvasRef: React.RefObject<HTMLCanvasElement>,
+  width: number,
+  height: number
+) {
+  const [scaledWidthHeight, setScaledWidthHeight] = React.useState<
+    null | [number, number]
+  >(null);
+
+  React.useLayoutEffect(() => {
+    const current = canvasRef.current;
+    const context = current?.getContext("2d");
+
+    const scale = window.devicePixelRatio; // 2 on retina
+    if (current) {
+      if (!context) {
+        console.warn("Context not loaded before scaling.");
+        return;
+      }
+
+      setScaledWidthHeight([
+        Math.floor(width * scale),
+        Math.floor(height * scale),
+      ]);
+
+      context.scale(scale, scale);
+      current.style.width = `${width}px`;
+      current.style.height = `${height}px`;
+    } else {
+      console.warn("Canvas element not loaded before scaling.");
+    }
+
+    return () => context?.scale(1 / scale, 1 / scale);
+  }, [canvasRef, height, width]);
+
+  return scaledWidthHeight || [width, height];
+}
+
 function BackgroundCanvas({
-  width,
-  height,
+  width: originalWidth,
+  height: originalHeight,
   canvasRef,
 }: {
   width: number;
   height: number;
   canvasRef: React.RefObject<HTMLCanvasElement>;
 }) {
+  const [width, height] = useScaleByDevicePixelRatio(
+    canvasRef,
+    originalWidth,
+    originalHeight
+  );
+
   React.useEffect(() => {
     const current = canvasRef.current;
     if (current) {
@@ -238,6 +299,7 @@ function BackgroundCanvas({
       console.error("No background ref! (ie canvas was not mounted)");
     }
   }, [canvasRef, width]);
+
   return (
     <canvas
       id="background-canvas"
@@ -246,6 +308,23 @@ function BackgroundCanvas({
       ref={canvasRef}
     ></canvas>
   );
+}
+
+// function useTopLeft TODO
+function useTopLeftCorner(container: HTMLDivElement) {
+  const [leftTop, setLeftTop] = React.useState<
+    { left: number; top: number } | undefined
+  >(undefined);
+
+  React.useLayoutEffect(() => {
+    const boundingRect = container.getBoundingClientRect();
+    if (boundingRect) {
+      const { left, top } = boundingRect;
+      setLeftTop({ left, top });
+    }
+  }, [container]);
+
+  return leftTop;
 }
 
 export default function Canvas({
@@ -269,17 +348,7 @@ export default function Canvas({
   // Use useImperativeHandle so that App.tsx doesn't need to know about internals of canvas
   const drawingCanvasRef = React.useRef<HTMLCanvasElement>(null);
 
-  const [leftTop, setLeftTop] = React.useState<
-    { left: number; top: number } | undefined
-  >(undefined);
-
-  React.useLayoutEffect(() => {
-    const boundingRect = container.getBoundingClientRect();
-    if (boundingRect) {
-      const { left, top } = boundingRect;
-      setLeftTop({ left, top });
-    }
-  }, [container]);
+  const leftTop = useTopLeftCorner(container);
 
   const onCommit = React.useCallback(() => {
     if (drawingCanvasRef.current) {
@@ -293,17 +362,16 @@ export default function Canvas({
           backgroundContext.drawImage(drawingCanvas, 0, 0);
         }
 
-        context.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+        const scale = window.devicePixelRatio;
+        context.clearRect(
+          0,
+          0,
+          drawingCanvas.width * scale,
+          drawingCanvas.height * scale
+        );
       }
     }
   }, [backgroundCanvasRef]);
-
-  React.useEffect(() => {
-    const ctx = drawingCanvasRef.current?.getContext("2d");
-    if (ctx) {
-      ctx.imageSmoothingEnabled = false;
-    }
-  }, []);
 
   return (
     <>
@@ -312,6 +380,7 @@ export default function Canvas({
         width={width}
         height={height}
       />
+
       {leftTop && (
         <DrawingCanvas
           toolSize={toolSize}

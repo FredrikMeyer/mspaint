@@ -1,22 +1,15 @@
 import { Color } from "./colors";
 
 export default class FloodFiller {
-  #width: number;
-  #height: number;
   #backgroundCanvas: HTMLCanvasElement;
 
-  constructor(
-    width: number,
-    height: number,
-    backgroundCanvas: HTMLCanvasElement
-  ) {
-    this.#width = width;
-    this.#height = height;
+  constructor(backgroundCanvas: HTMLCanvasElement) {
     this.#backgroundCanvas = backgroundCanvas;
   }
 
   #neighboursOfPt(x: number, y: number): { x: number; y: number }[] {
     // Return neighbours in north/south/etc directions within the frame
+
     return [
       { x: x + 1, y },
       { x: x - 1, y },
@@ -25,6 +18,14 @@ export default class FloodFiller {
     ].filter(
       ({ x, y }) => x >= 0 && x < this.#width && y >= 0 && y <= this.#height
     );
+  }
+
+  get #width() {
+    return this.#backgroundCanvas.width;
+  }
+
+  get #height() {
+    return this.#backgroundCanvas.height;
   }
 
   #ptToIndex(x: number, y: number): number {
@@ -58,7 +59,7 @@ export default class FloodFiller {
     let current = queue.shift();
     let i = 0;
     while (current && i < this.#width * this.#height) {
-      if (i % 100000 === 0) {
+      if (i % 1000000 === 0) {
         console.log(i);
       }
       const neigbours = this.#neighboursOfPt(current.x, current.y);
@@ -101,13 +102,6 @@ export default class FloodFiller {
     );
 
     const imageDataArray = imageData.data;
-
-    const indexToPt = (ind: number): [number, number] => {
-      const x = ind % this.#width;
-      const y = (ind - x) / this.#width;
-
-      return [x, y];
-    };
 
     const doFill = () => {
       imageData.data.set(buf8);
