@@ -60,7 +60,8 @@ function App() {
 
     if (ctx && canvasDimensions) {
       const [height, width] = canvasDimensions;
-      ctx.clearRect(0, 0, width, height);
+      const scale = window.devicePixelRatio;
+      ctx.clearRect(0, 0, width * scale, height * scale);
     } else {
       // eslint-disable-next-line no-console
       console.error("No ctx!");
