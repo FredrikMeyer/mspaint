@@ -1,7 +1,7 @@
 import React from "react";
 
 export function useClickedOutside<E extends HTMLElement>(
-  setClickedOutside: (cl: boolean) => void
+  setClickedOutside: (cl: boolean) => void,
 ) {
   const ref = React.useRef<E>(null);
 

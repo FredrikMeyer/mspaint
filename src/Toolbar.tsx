@@ -16,7 +16,7 @@ const toolMap = {
 export type DrawingTool = keyof typeof toolMap;
 
 const rToolMap = Object.fromEntries(
-  Object.entries(toolMap).map(([key, val]) => [val, key as DrawingTool])
+  Object.entries(toolMap).map(([key, val]) => [val, key as DrawingTool]),
 ) as Record<number, DrawingTool>;
 
 export default function Toolbar({

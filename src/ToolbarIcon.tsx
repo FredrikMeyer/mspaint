@@ -27,7 +27,7 @@ export default function ToolbarIcon(properties: ToolbarIconProperties) {
         width={`${w}px`}
         className={cn(
           marked ? styles["toolbar-icon-marked"] : undefined,
-          !implemented && styles["toolbar-icon-not-implemented"]
+          !implemented && styles["toolbar-icon-not-implemented"],
         )}
         onClick={setAsActive}
         alt={altText}
