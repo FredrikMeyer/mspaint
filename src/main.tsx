@@ -11,7 +11,7 @@ if (container) {
   root.render(
     <React.StrictMode>
       <App />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 } else {
   // eslint-disable-next-line no-console

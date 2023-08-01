@@ -21,7 +21,7 @@ function useActivateMenu(numberOfElements: number) {
       }
       if (ev.key === "ArrowLeft") {
         setActiveElement(
-          (activeElement + numberOfElements - 1) % numberOfElements
+          (activeElement + numberOfElements - 1) % numberOfElements,
         );
       }
     };

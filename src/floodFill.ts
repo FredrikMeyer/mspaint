@@ -16,7 +16,7 @@ export default class FloodFiller {
       { x, y: y - 1 },
       { x, y: y + 1 },
     ].filter(
-      ({ x, y }) => x >= 0 && x < this.#width && y >= 0 && y <= this.#height
+      ({ x, y }) => x >= 0 && x < this.#width && y >= 0 && y <= this.#height,
     );
   }
 
@@ -36,7 +36,7 @@ export default class FloodFiller {
     x: number,
     y: number,
     startColor: number,
-    dataArray: Uint32Array
+    dataArray: Uint32Array,
   ): boolean {
     // Check if point is the same color as start color
 
@@ -50,7 +50,7 @@ export default class FloodFiller {
     startX: number,
     startY: number,
     newColor: number,
-    dataArray: Uint32Array
+    dataArray: Uint32Array,
   ) {
     const startColor = dataArray[this.#ptToIndex(startX, startY)];
     const queue: { x: number; y: number }[] = [{ x: startX, y: startY }];
@@ -98,7 +98,7 @@ export default class FloodFiller {
       0,
       0,
       this.#width,
-      this.#height
+      this.#height,
     );
 
     const imageDataArray = imageData.data;

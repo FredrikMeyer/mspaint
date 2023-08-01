@@ -42,7 +42,7 @@ function Dropdown({
 function useShortcutListener(
   active: boolean,
   shortcut: Optional<string>,
-  callback: Optional<() => void>
+  callback: Optional<() => void>,
 ) {
   React.useEffect(() => {
     const eventListener = (ev: KeyboardEvent) => {
@@ -94,7 +94,7 @@ export default function MenuElement({
   useShortcutListener(
     listenForKey,
     prop.shortcut,
-    (prop.kind == "LEAF" && prop.callback) || undefined
+    (prop.kind == "LEAF" && prop.callback) || undefined,
   );
   return (
     <div

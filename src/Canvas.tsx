@@ -6,7 +6,7 @@ import FloodFiller from "./floodFill";
 
 function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
   const [ctx, setCtx] = React.useState<CanvasRenderingContext2D | undefined>(
-    undefined
+    undefined,
   );
 
   React.useEffect(() => {
@@ -25,7 +25,7 @@ function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
 function mouseEventToCoords(
   ev: React.MouseEvent<HTMLCanvasElement>,
   top: number,
-  left: number
+  left: number,
 ) {
   const x = ev.clientX - left;
   const y = ev.clientY - top;
@@ -59,7 +59,7 @@ function DrawingCanvas({
   const [width, height] = useScaleByDevicePixelRatio(
     canvasRef,
     originalWidth,
-    originalHeight
+    originalHeight,
   );
 
   const [drawingState, setDrawingState] = React.useState<
@@ -78,7 +78,7 @@ function DrawingCanvas({
         ctx?.beginPath();
       }
     },
-    [ctx, activeTool]
+    [ctx, activeTool],
   );
 
   const onMove = React.useCallback(
@@ -103,7 +103,7 @@ function DrawingCanvas({
           Math.floor(startX) + 0.5,
           Math.floor(startY) + 0.5,
           rectWidth,
-          rectHeight
+          rectHeight,
         );
         ctx.stroke();
         return;
@@ -119,7 +119,7 @@ function DrawingCanvas({
           Math.floor(startY) + 0.5,
           rectWidth,
           rectHeight,
-          20
+          20,
         );
         ctx.stroke();
         return;
@@ -151,7 +151,7 @@ function DrawingCanvas({
       }
     },
 
-    [currentColor, activeTool, toolSize, height, width, drawingState]
+    [currentColor, activeTool, toolSize, height, width, drawingState],
   );
 
   const floodfiller = React.useMemo(
@@ -159,7 +159,7 @@ function DrawingCanvas({
       backgroundCanvasRef.current
         ? new FloodFiller(backgroundCanvasRef.current)
         : undefined,
-    [backgroundCanvasRef]
+    [backgroundCanvasRef],
   );
 
   const onPointerDown = React.useCallback(
@@ -191,7 +191,7 @@ function DrawingCanvas({
       onDrawStart,
       floodfiller,
       currentColor,
-    ]
+    ],
   );
 
   const onPointerMove = React.useCallback(
@@ -204,7 +204,7 @@ function DrawingCanvas({
         onMove(ctx, x, y);
       }
     },
-    [ctx, leftTop.left, leftTop.top, onMove]
+    [ctx, leftTop.left, leftTop.top, onMove],
   );
 
   const onPointerUp = React.useCallback(() => {
@@ -230,7 +230,7 @@ function DrawingCanvas({
 function useScaleByDevicePixelRatio(
   canvasRef: React.RefObject<HTMLCanvasElement>,
   width: number,
-  height: number
+  height: number,
 ) {
   const [scaledWidthHeight, setScaledWidthHeight] = React.useState<
     null | [number, number]
@@ -277,7 +277,7 @@ function BackgroundCanvas({
   const [width, height] = useScaleByDevicePixelRatio(
     canvasRef,
     originalWidth,
-    originalHeight
+    originalHeight,
   );
 
   React.useEffect(() => {
@@ -367,7 +367,7 @@ export default function Canvas({
           0,
           0,
           drawingCanvas.width * scale,
-          drawingCanvas.height * scale
+          drawingCanvas.height * scale,
         );
       }
     }
