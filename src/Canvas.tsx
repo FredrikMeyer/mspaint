@@ -157,9 +157,9 @@ function DrawingCanvas({
   const floodfiller = React.useMemo(
     () =>
       backgroundCanvasRef.current
-        ? new FloodFiller(backgroundCanvasRef.current)
+        ? new FloodFiller(backgroundCanvasRef.current, width, height)
         : undefined,
-    [backgroundCanvasRef],
+    [backgroundCanvasRef, width, height],
   );
 
   const onPointerDown = React.useCallback(
@@ -179,7 +179,9 @@ function DrawingCanvas({
       }
       if (activeTool == "FILL") {
         if (floodfiller) {
+          console.time("floodstart");
           floodfiller.floodFill(x, y, currentColor);
+          console.timeEnd("floodstart");
         }
       }
       onDrawStart(x, y);
