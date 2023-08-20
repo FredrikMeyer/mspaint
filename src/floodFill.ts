@@ -54,9 +54,6 @@ export default class FloodFiller {
     let current = queue.shift();
     let i = 0;
     while (current && i < this.#width * this.#height) {
-      if (i % 1000000 === 0) {
-        console.log(i);
-      }
       const neigbours = this.#neighboursOfPt(current.x, current.y);
 
       for (const n of neigbours) {

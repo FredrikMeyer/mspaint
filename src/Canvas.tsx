@@ -179,9 +179,7 @@ function DrawingCanvas({
       }
       if (activeTool == "FILL") {
         if (floodfiller) {
-          console.time("floodstart");
           floodfiller.floodFill(x, y, currentColor);
-          console.timeEnd("floodstart");
         }
       }
       onDrawStart(x, y);
