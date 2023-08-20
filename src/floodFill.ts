@@ -2,47 +2,42 @@ import { Color } from "./colors";
 
 export default class FloodFiller {
   #backgroundCanvas: HTMLCanvasElement;
+  #width: number;
+  #height: number;
 
-  constructor(backgroundCanvas: HTMLCanvasElement) {
+  constructor(
+    backgroundCanvas: HTMLCanvasElement,
+    width: number,
+    height: number,
+  ) {
     this.#backgroundCanvas = backgroundCanvas;
+    this.#width = width;
+    this.#height = height;
   }
 
   #neighboursOfPt(x: number, y: number): { x: number; y: number }[] {
-    // Return neighbours in north/south/etc directions within the frame
-
-    return [
-      { x: x + 1, y },
-      { x: x - 1, y },
-      { x, y: y - 1 },
-      { x, y: y + 1 },
-    ].filter(
-      ({ x, y }) => x >= 0 && x < this.#width && y >= 0 && y <= this.#height,
-    );
-  }
-
-  get #width() {
-    return this.#backgroundCanvas.width;
-  }
-
-  get #height() {
-    return this.#backgroundCanvas.height;
+    // Optimised thanks to ChatGPT
+    // Generate only valid neighbors to avoid unnecessary calculations
+    const neighbours = [];
+    if (x + 1 < this.#width) neighbours.push({ x: x + 1, y });
+    if (x - 1 >= 0) neighbours.push({ x: x - 1, y });
+    if (y + 1 < this.#height) neighbours.push({ x, y: y + 1 });
+    if (y - 1 >= 0) neighbours.push({ x, y: y - 1 });
+    return neighbours;
   }
 
   #ptToIndex(x: number, y: number): number {
-    return Math.round(y) * this.#width + Math.round(x);
+    return y * this.#width + x;
   }
 
   #shouldBeColored(
-    x: number,
-    y: number,
+    index: number,
     startColor: number,
     dataArray: Uint32Array,
   ): boolean {
     // Check if point is the same color as start color
 
-    const indexOfPt = this.#ptToIndex(x, y);
-
-    const color = dataArray[indexOfPt];
+    const color = dataArray[index];
     return color === startColor;
   }
 
@@ -59,19 +54,16 @@ export default class FloodFiller {
     let current = queue.shift();
     let i = 0;
     while (current && i < this.#width * this.#height) {
-      if (i % 1000000 === 0) {
-        console.log(i);
-      }
       const neigbours = this.#neighboursOfPt(current.x, current.y);
 
       for (const n of neigbours) {
         const index = this.#ptToIndex(n.x, n.y);
         if (
           !visitedNodes[index] &&
-          this.#shouldBeColored(n.x, n.y, startColor, dataArray)
+          this.#shouldBeColored(index, startColor, dataArray)
         ) {
           queue.push(n);
-          dataArray[this.#ptToIndex(n.x, n.y)] = newColor;
+          dataArray[index] = newColor;
           visitedNodes[index] = true;
         }
       }
@@ -101,18 +93,23 @@ export default class FloodFiller {
       this.#height,
     );
 
-    const imageDataArray = imageData.data;
-
     const doFill = () => {
       imageData.data.set(buf8);
       backgroundContext.putImageData(imageData, 0, 0);
     };
 
+    const imageDataArray = imageData.data;
+
     const buf = imageDataArray.buffer;
     const buf8 = new Uint8ClampedArray(buf);
     const data = new Uint32Array(buf);
 
-    this.#fillArray(x, y, Color.to32BitRepresentation(currentColor), data);
+    this.#fillArray(
+      Math.round(x),
+      Math.round(y),
+      Color.to32BitRepresentation(currentColor),
+      data,
+    );
     doFill();
   }
 }

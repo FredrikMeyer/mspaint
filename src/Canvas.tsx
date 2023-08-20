@@ -157,9 +157,9 @@ function DrawingCanvas({
   const floodfiller = React.useMemo(
     () =>
       backgroundCanvasRef.current
-        ? new FloodFiller(backgroundCanvasRef.current)
+        ? new FloodFiller(backgroundCanvasRef.current, width, height)
         : undefined,
-    [backgroundCanvasRef],
+    [backgroundCanvasRef, width, height],
   );
 
   const onPointerDown = React.useCallback(
