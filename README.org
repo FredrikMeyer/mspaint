@@ -1,3 +1,4 @@
+
 #+TITLE: MS Paint look-a-like in React
 
 #+CAPTION: Build status
@@ -58,3 +59,11 @@ https://codeheir.com/2022/08/21/comparing-flood-fill-algorithms-in-javascript/
 Se den hacker-vidoen (ca 21 min uti), eksempel på tegning. Ideer:rotering, kopering, cut/paste
 
 https://hacks.mozilla.org/2011/12/faster-canvas-pixel-manipulation-with-typed-arrays/
+
+* Litteratur
+
+Midpoint circle algorithm
+https://imruljubair.github.io/teaching/material/CSE4203/Chapter%20-%208%20(part%20-%20B).pdf
+https://uomustansiriyah.edu.iq/media/lectures/12/12_2020_06_26!11_47_57_PM.pdf
+
+
