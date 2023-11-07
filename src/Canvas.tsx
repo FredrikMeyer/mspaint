@@ -19,7 +19,25 @@ function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
     }
   }, [reference]);
 
+  if (ctx) {
+    ctx.imageSmoothingEnabled = false;
+  }
+
   return { ctx: ctx };
+}
+
+function getNewPixel(contxt: CanvasRenderingContext2D, size: number) {
+  const p = contxt.createImageData(size, size);
+  const d = p.data;
+
+  for (let i = 0; i < d.length / 4; i++) {
+    d[4 * i] = 0;
+    d[4 * i + 1] = 0;
+    d[4 * i + 2] = 0;
+    d[4 * i + 3] = 255;
+  }
+
+  return p;
 }
 
 function mouseEventToCoords(
@@ -133,10 +151,44 @@ function DrawingCanvas({
         const rx = Math.abs(rectWidth);
         const ry = Math.abs(rectHeight);
 
-        const cx = startX + 0.5 * rectWidth;
-        const cy = startY + 0.5 * rectHeight;
+        const cx = Math.round(startX + 0.5 * rectWidth);
+        const cy = Math.round(startY + 0.5 * rectHeight);
         ctx.beginPath();
-        ctx.ellipse(cx, cy, 0.5 * rx, 0.5 * ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = Color.toRGBString(currentColor);
+        ctx.fillRect(cx, cy, 1, 1);
+
+        const pxl = getNewPixel(ctx, toolSize);
+        const circleSymmetricPts = (x: number, y: number) => {
+          ctx.putImageData(pxl, x, y);
+          ctx.putImageData(pxl, x, -y + 2 * cy); // x, -y
+          ctx.putImageData(pxl, -x + 2 * cx, y); // -x, y
+          ctx.putImageData(pxl, -x + 2 * cx, -y + 2 * cy); // -x, -y
+
+          ctx.putImageData(pxl, y - cy + cx, x - cx + cy); // y, x
+          ctx.putImageData(pxl, y - cy + cx, -x + cx + cy); // y, -x  : y -> y - cy -> x - cx -> cx - x -> cx - x + cy
+          ctx.putImageData(pxl, -y + cy + cx, x - cx + cy); // - y, x : x -> x - cx -> y - cy -> cy - y -> cy -y + cx
+          ctx.putImageData(pxl, -y + cy + cx, -x + cx + cy); // -y, -x :
+        };
+
+        const drawCircle = (radius: number) => {
+          let xPosition = 0;
+          let yPosition = radius;
+          let d = 1 - radius;
+          circleSymmetricPts(cx + xPosition, cy + yPosition);
+
+          while (yPosition > xPosition) {
+            if (d < 0) {
+              d = d + 2 * xPosition + 3;
+            } else {
+              d = d + 2 * (xPosition - yPosition) + 5;
+              yPosition = yPosition - 1;
+            }
+            xPosition = xPosition + 1;
+            circleSymmetricPts(cx + xPosition, cy + yPosition);
+          }
+        };
+
+        drawCircle(rx);
 
         ctx.stroke();
         return;
