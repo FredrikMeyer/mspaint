@@ -6,6 +6,10 @@
   display: flex;
   flex-direction: row;
 
+  &-rows {
+    flex-grow: 1;
+  }
+
   &-row {
     display: flex;
 
@@ -17,16 +21,18 @@
   }
 }
 
-.current-color {
+.current-background-color {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   border: 1px solid black;
   width: 5vw;
   height: 100%;
+  margin-right: 3px;
 }
 
-.current-background-color {
+.current-color {
   width: 50%;
   height: 50%;
   border: 1px solid black;

@@ -50,6 +50,8 @@ function App() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   const [currentColor, setCurrentColor] = React.useState<Color>(COLORS.BLACK);
+  const [currentBackgroundColor, setCurrentBackgroundColor] =
+    React.useState<Color>(COLORS.WHITE);
   const [activeTool, setActiveTool] = React.useState<DrawingTool>("DRAW");
   const [toolSize, setToolSize] = React.useState<number>(1);
 
@@ -169,6 +171,8 @@ function App() {
               <ColorPicker
                 currentColor={currentColor}
                 setCurrentColor={setCurrentColor}
+                currentBackgroundColor={currentBackgroundColor}
+                setCurrentBackgroundColor={setCurrentBackgroundColor}
               />
             </div>
           </div>
