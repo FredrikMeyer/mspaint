@@ -1,4 +1,4 @@
-import { Color } from "./colors";
+import { Color, ColorFactory } from "./colors";
 
 export default class FloodFiller {
   #backgroundCanvas: HTMLCanvasElement;
@@ -107,7 +107,7 @@ export default class FloodFiller {
     this.#fillArray(
       Math.round(x),
       Math.round(y),
-      Color.to32BitRepresentation(currentColor),
+      ColorFactory.to32BitRepresentation(currentColor),
       data,
     );
     doFill();

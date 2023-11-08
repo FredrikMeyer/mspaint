@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ColorPicker.module.scss";
-import { COLORS, Color } from "./colors";
+import { COLORS, Color, ColorFactory } from "./colors";
 
 const {
   WHITE,
@@ -68,7 +68,9 @@ export default function ColorPicker({
     <div className={styles["color-picker"]}>
       <div
         className={styles["current-background-color"]}
-        style={{ backgroundColor: Color.toRGBString(currentBackgroundColor) }}
+        style={{
+          backgroundColor: ColorFactory.toRGBString(currentBackgroundColor),
+        }}
         onClick={(e) => {
           e.stopPropagation();
           setCurrentBackgroundColor(currentColor);
@@ -78,7 +80,7 @@ export default function ColorPicker({
         <div
           className={styles["current-color"]}
           style={{
-            backgroundColor: Color.toRGBString(currentColor),
+            backgroundColor: ColorFactory.toRGBString(currentColor),
           }}
           onClick={(e) => e.stopPropagation()}
         ></div>
@@ -88,7 +90,7 @@ export default function ColorPicker({
           {row1.map((c, i) => (
             <div
               key={i}
-              style={{ backgroundColor: Color.toRGBString(c) }}
+              style={{ backgroundColor: ColorFactory.toRGBString(c) }}
               onClick={() => setCurrentColor(c)}
             ></div>
           ))}
@@ -97,7 +99,7 @@ export default function ColorPicker({
           {row2.map((c, i) => (
             <div
               key={i}
-              style={{ backgroundColor: Color.toRGBString(c) }}
+              style={{ backgroundColor: ColorFactory.toRGBString(c) }}
               onClick={() => setCurrentColor(c)}
             ></div>
           ))}
