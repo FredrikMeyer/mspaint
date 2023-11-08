@@ -30,6 +30,24 @@ function useCanvasDimension(
     React.useState<Optional<[number, number]>>();
 
   React.useEffect(() => {
+    const observer = new ResizeObserver((e) => {
+      if (e.length > 0) {
+        const observerEntry = e[0];
+        setCanvasDimensions([
+          observerEntry.contentRect.height,
+          observerEntry.contentRect.width,
+        ]);
+      }
+    });
+    const current = canvasContainerRef.current;
+    if (current) {
+      observer.observe(current);
+    }
+
+    return () => (current ? observer.unobserve(current) : undefined);
+  });
+
+  React.useEffect(() => {
     const current = canvasContainerRef.current;
     if (current) {
       const height = current.clientHeight;
