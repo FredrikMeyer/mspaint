@@ -24,7 +24,7 @@ function useClearCanvasByKey(clearCanvas: () => void) {
 }
 
 function useCanvasDimension(
-  canvasContainerRef: React.RefObject<HTMLDivElement>,
+  canvasContainerRef: React.RefObject<HTMLDivElement | null>,
 ) {
   const [canvasDimensions, setCanvasDimensions] =
     React.useState<Optional<[number, number]>>();
