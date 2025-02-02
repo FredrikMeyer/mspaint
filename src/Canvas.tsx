@@ -12,7 +12,7 @@ function BackgroundCanvas({
 }: {
   width: number;
   height: number;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }) {
   const [width, height] = useScaleByDevicePixelRatio(
     canvasRef,
@@ -80,7 +80,7 @@ export default function Canvas({
   width: number;
   height: number;
   container: HTMLDivElement;
-  backgroundCanvasRef: React.RefObject<HTMLCanvasElement>;
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   currentColor: Color;
   toolSize: number;
 }) {
