@@ -7,7 +7,7 @@
   "updateContentCommand": "yarn",
   "postCreateCommand": "",
   "postAttachCommand": {
-    "server": "yarn start"
+    "server": "yarn start &"
   },
   "customizations": {
     "codespaces": {
