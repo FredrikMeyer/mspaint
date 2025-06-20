@@ -5,7 +5,7 @@ import { Color, ColorFactory } from "./colors";
 import FloodFiller from "./floodFill";
 import { useScaleByDevicePixelRatio } from "./canvasUtils";
 
-function useCtx(reference: React.RefObject<HTMLCanvasElement>) {
+function useCtx(reference: React.RefObject<HTMLCanvasElement | null>) {
   const [ctx, setCtx] = React.useState<CanvasRenderingContext2D | undefined>(
     undefined,
   );
@@ -66,8 +66,8 @@ export default function DrawingCanvas({
   currentColor: Color;
   width: number;
   height: number;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  backgroundCanvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   leftTop: { left: number; top: number };
   onCommit: () => void;
 }) {

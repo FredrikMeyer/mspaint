@@ -1,7 +1,7 @@
 import React from "react";
 
 export function useScaleByDevicePixelRatio(
-  canvasRef: React.RefObject<HTMLCanvasElement>,
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
   width: number,
   height: number,
 ) {
