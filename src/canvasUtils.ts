@@ -39,7 +39,8 @@ export function resizeCanvas(
     return;
   }
 
-  // Copy the content back to the resized canvas
+  // Copy the content back to the resized canvas without stretching
+  // Use the original dimensions to avoid stretching the content
   context.drawImage(
     tempCanvas,
     0,
@@ -48,8 +49,8 @@ export function resizeCanvas(
     tempCanvas.height,
     0,
     0,
-    newWidth,
-    newHeight,
+    tempCanvas.width,
+    tempCanvas.height,
   );
 }
 
