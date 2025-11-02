@@ -49,18 +49,21 @@ function BackgroundCanvas({
 }
 
 // function useTopLeft TODO
-function useTopLeftCorner(container: HTMLDivElement) {
+function useTopLeftCorner(containerRef: React.RefObject<HTMLDivElement | null>) {
   const [leftTop, setLeftTop] = React.useState<
     { left: number; top: number } | undefined
   >(undefined);
 
   React.useLayoutEffect(() => {
-    const boundingRect = container.getBoundingClientRect();
-    if (boundingRect) {
-      const { left, top } = boundingRect;
-      setLeftTop({ left, top });
+    const container = containerRef.current;
+    if (container) {
+      const boundingRect = container.getBoundingClientRect();
+      if (boundingRect) {
+        const { left, top } = boundingRect;
+        setLeftTop({ left, top });
+      }
     }
-  }, [container]);
+  }, [containerRef]);
 
   return leftTop;
 }
@@ -68,7 +71,7 @@ function useTopLeftCorner(container: HTMLDivElement) {
 export default function Canvas({
   width,
   height,
-  container,
+  containerRef,
   backgroundCanvasRef,
   currentColor,
   activeTool,
@@ -77,7 +80,7 @@ export default function Canvas({
   activeTool: DrawingTool;
   width: number;
   height: number;
-  container: HTMLDivElement;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   currentColor: Color;
   toolSize: number;
@@ -86,7 +89,7 @@ export default function Canvas({
   // Use useImperativeHandle so that App.tsx doesn't need to know about internals of canvas
   const drawingCanvasRef = React.useRef<HTMLCanvasElement>(null);
 
-  const leftTop = useTopLeftCorner(container);
+  const leftTop = useTopLeftCorner(containerRef);
 
   const onCommit = React.useCallback(() => {
     if (drawingCanvasRef.current) {

@@ -170,10 +170,10 @@ function App() {
                   id="canvas"
                   ref={canvasContainerRef}
                 >
-                  {canvasDimensions && canvasContainerRef.current ? (
+                  {canvasDimensions ? (
                     <Canvas
                       activeTool={activeTool}
-                      container={canvasContainerRef.current}
+                      containerRef={canvasContainerRef}
                       backgroundCanvasRef={canvasRef}
                       currentColor={currentColor}
                       toolSize={toolSize}

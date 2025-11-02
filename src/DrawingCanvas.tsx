@@ -155,13 +155,14 @@ export default function DrawingCanvas({
     [currentColor, activeTool, toolSize, height, width, drawingState],
   );
 
-  const floodfiller = React.useMemo(
-    () =>
-      backgroundCanvasRef.current
-        ? new FloodFiller(backgroundCanvasRef.current, width, height)
-        : undefined,
-    [backgroundCanvasRef, width, height],
-  );
+  const floodfillerRef = React.useRef<FloodFiller | undefined>(undefined);
+
+  React.useEffect(() => {
+    const canvas = backgroundCanvasRef.current;
+    if (canvas) {
+      floodfillerRef.current = new FloodFiller(canvas, width, height);
+    }
+  }, [backgroundCanvasRef, width, height]);
 
   const onPointerDown = React.useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -179,8 +180,8 @@ export default function DrawingCanvas({
         setDrawingState({ tool: "CIRCLE", startPoint: [x, y] });
       }
       if (activeTool == "FILL") {
-        if (floodfiller) {
-          floodfiller.floodFill(x, y, currentColor);
+        if (floodfillerRef.current) {
+          floodfillerRef.current.floodFill(x, y, currentColor);
         }
       }
       onDrawStart(x, y);
@@ -190,7 +191,6 @@ export default function DrawingCanvas({
       leftTop.left,
       leftTop.top,
       onDrawStart,
-      floodfiller,
       currentColor,
     ],
   );
