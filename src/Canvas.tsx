@@ -49,7 +49,9 @@ function BackgroundCanvas({
 }
 
 // function useTopLeft TODO
-function useTopLeftCorner(containerRef: React.RefObject<HTMLDivElement | null>) {
+function useTopLeftCorner(
+  containerRef: React.RefObject<HTMLDivElement | null>,
+) {
   const [leftTop, setLeftTop] = React.useState<
     { left: number; top: number } | undefined
   >(undefined);

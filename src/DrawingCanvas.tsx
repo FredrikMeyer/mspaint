@@ -186,13 +186,7 @@ export default function DrawingCanvas({
       }
       onDrawStart(x, y);
     },
-    [
-      activeTool,
-      leftTop.left,
-      leftTop.top,
-      onDrawStart,
-      currentColor,
-    ],
+    [activeTool, leftTop.left, leftTop.top, onDrawStart, currentColor],
   );
 
   const onPointerMove = React.useCallback(
