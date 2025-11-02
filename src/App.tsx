@@ -83,7 +83,6 @@ function App() {
       const scale = window.devicePixelRatio;
       ctx.clearRect(0, 0, width * scale, height * scale);
     } else {
-      // eslint-disable-next-line no-console
       console.error("No ctx!");
     }
   }, [canvasRef, canvasDimensions]);

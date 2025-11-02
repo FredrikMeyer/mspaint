@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a React-based MS Paint clone that recreates the classic Windows Paint interface. The application is built with TypeScript and uses Vite as the build tool.
 
 ### Core Components Structure
+
 - **App.tsx** - Main application container managing global state (colors, tools, canvas dimensions)
 - **Canvas.tsx** - Primary drawing canvas component
 - **Toolbar.tsx** - Left sidebar with drawing tools (pencil, brush, fill, etc.)
@@ -27,21 +28,25 @@ This is a React-based MS Paint clone that recreates the classic Windows Paint in
 ### Key Technical Details
 
 **Canvas Management:**
+
 - Uses HTML5 Canvas API with device pixel ratio scaling for crisp rendering on high-DPI displays
 - Canvas dimensions are dynamically calculated using ResizeObserver
 - Drawing operations handle both foreground drawing canvas and background reference canvas
 
 **Styling:**
+
 - SCSS with CSS Modules for component-scoped styling
 - PostCSS pipeline with nesting, autoprefixer, and CSS Modules values
 - Shared variables in `_common.scss`
 
 **State Management:**
+
 - React hooks for local state management
 - Custom hooks for canvas dimensions (`useCanvasDimension`) and keyboard shortcuts (`useClearCanvasByKey`)
 - Canvas scaling handled by `useScaleByDevicePixelRatio` hook in `canvasUtils.ts`
 
 **Drawing Tools:**
+
 - Tool types defined in `types.ts`
 - Flood fill algorithm implemented in `floodFill.ts`
 - Canvas utilities for pixel manipulation and scaling

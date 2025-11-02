@@ -1,13 +1,14 @@
 {
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "vite --host",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "prettier": "prettier src --check",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint --ext .ts,.js,.tsx,.jsx src",
+    "lint": "eslint src",
     "stylelint": "stylelint --aei \"src/**/*.*css\""
   },
   "dependencies": {
@@ -19,13 +20,14 @@
   "devDependencies": {
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
-    "eslint": "^8.57.0",
+    "eslint": "^9.0.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.5.0",
     "postcss-modules-values": "^4.0.0",
     "postcss-nesting": "^13.0.2",
     "prettier": "3.6.2",
@@ -35,6 +37,7 @@
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-scss": "^11.1.0",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.0.0",
     "typescript-plugin-css-modules": "^5.2.0",
     "vite": "^7.1.11"
   },

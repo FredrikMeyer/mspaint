@@ -14,6 +14,5 @@ if (container) {
     </React.StrictMode>,
   );
 } else {
-  // eslint-disable-next-line no-console
   console.error("No root element found!");
 }

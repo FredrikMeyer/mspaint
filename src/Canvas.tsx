@@ -31,11 +31,9 @@ function BackgroundCanvas({
         ctx.font = `${fontSize / 2}px serif`;
         ctx.fillText("draw here", 10, 250);
       } else {
-        // eslint-disable-next-line no-console
         console.error("No canvas ctx yet");
       }
     } else {
-      // eslint-disable-next-line no-console
       console.error("No background ref! (ie canvas was not mounted)");
     }
   }, [canvasRef, width]);
