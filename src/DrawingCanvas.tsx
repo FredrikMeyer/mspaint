@@ -28,12 +28,20 @@ function mouseEventToCoords(
   top: number,
   left: number,
 ) {
-  const x = ev.clientX - left;
-  const y = ev.clientY - top;
+  // Get the target canvas element
+  const canvas = ev.currentTarget;
+  
+  // Calculate the position relative to the canvas element
+  const rect = canvas.getBoundingClientRect();
+  const x = ev.clientX - rect.left;
+  const y = ev.clientY - rect.top;
 
-  const scale = window.devicePixelRatio;
+  // Calculate the scale factor between the CSS size and the actual canvas size
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
 
-  return [x * scale, y * scale];
+  // Apply the scale to get the correct coordinates on the canvas
+  return [x * scaleX, y * scaleY];
 }
 
 export default function DrawingCanvas({
