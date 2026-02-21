@@ -30,7 +30,7 @@
     "eslint-plugin-react-hooks": "^7.0.0",
     "globals": "^16.5.0",
     "postcss-modules-values": "^4.0.0",
-    "postcss-nesting": "^13.0.2",
+    "postcss-nesting": "^14.0.0",
     "prettier": "3.7.4",
     "sass": "^1.97.3",
     "stylelint": "^15.11.0",
