@@ -14,6 +14,10 @@ function BackgroundCanvas({
   height: number;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }) {
+  // Store the canvas content when dimensions change
+  const previousCanvasContent = React.useRef<ImageData | null>(null);
+  const previousDimensions = React.useRef<{width: number, height: number} | null>(null);
+  
   const [width, height] = useScaleByDevicePixelRatio(
     canvasRef,
     originalWidth,
@@ -25,18 +29,45 @@ function BackgroundCanvas({
     if (current) {
       const ctx = current.getContext("2d");
       if (ctx) {
-        const fontSize = (width * 15) / 200;
-        ctx.font = `${fontSize}px serif`;
-        ctx.fillText("Welcome", 10, 150);
-        ctx.font = `${fontSize / 2}px serif`;
-        ctx.fillText("draw here", 10, 250);
+        // If we have previous content and dimensions have changed, restore it
+        if (previousCanvasContent.current && previousDimensions.current &&
+            (previousDimensions.current.width !== width || previousDimensions.current.height !== height)) {
+          // Create a temporary canvas to hold the previous content
+          const tempCanvas = document.createElement("canvas");
+          tempCanvas.width = previousDimensions.current.width;
+          tempCanvas.height = previousDimensions.current.height;
+          const tempCtx = tempCanvas.getContext("2d");
+          
+          if (tempCtx) {
+            // Put the previous content on the temp canvas
+            tempCtx.putImageData(previousCanvasContent.current, 0, 0);
+            
+            // Draw the temp canvas onto the resized canvas
+            ctx.drawImage(tempCanvas, 0, 0);
+          }
+        } else if (!previousCanvasContent.current) {
+          // First render, draw the welcome text
+          const fontSize = (width * 15) / 200;
+          ctx.font = `${fontSize}px serif`;
+          ctx.fillText("Welcome", 10, 150);
+          ctx.font = `${fontSize / 2}px serif`;
+          ctx.fillText("draw here", 10, 250);
+        }
+        
+        // Store the current canvas content for future resizes
+        try {
+          previousCanvasContent.current = ctx.getImageData(0, 0, width, height);
+          previousDimensions.current = { width, height };
+        } catch (e) {
+          console.error("Failed to get image data:", e);
+        }
       } else {
         console.error("No canvas ctx yet");
       }
     } else {
       console.error("No background ref! (ie canvas was not mounted)");
     }
-  }, [canvasRef, width]);
+  }, [canvasRef, width, height]);
 
   return (
     <canvas
